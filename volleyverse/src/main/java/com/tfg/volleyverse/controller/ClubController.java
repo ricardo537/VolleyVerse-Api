@@ -8,23 +8,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tfg.volleyverse.dto.RegisterUserDTO;
-import com.tfg.volleyverse.service.imp.UserServiceImp;
+import com.tfg.volleyverse.dto.RegisterClubDTO;
+import com.tfg.volleyverse.service.imp.ClubServiceImp;
 
 @RestController
-@RequestMapping("/volleyverse/api/v1/users")
-public class UserController {
-
+@RequestMapping("volleyverse/api/v1/clubs")
+public class ClubController {
+	
 	@Autowired
-	private UserServiceImp userService;
+	private ClubServiceImp clubService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<Boolean> registerUser (@RequestBody RegisterUserDTO register) {
-		Boolean success = this.userService.registerUser(register);
+	public ResponseEntity<Boolean> registerClub (@RequestBody RegisterClubDTO register) {
+		Boolean success = this.clubService.registerClub(register);
 		if (success) {
 			return new ResponseEntity<>(success, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 		}
 	}
+
 }
