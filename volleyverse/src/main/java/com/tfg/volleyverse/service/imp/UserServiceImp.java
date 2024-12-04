@@ -3,6 +3,7 @@ package com.tfg.volleyverse.service.imp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.UserRepository;
@@ -17,7 +18,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public boolean registerUser(RegisterUserDTO register) {
 		//Falta añadir un try catch en caso de que el email no sea valido
-		if (existUser(register.getEmail(), register.getPassword())) {
+		if (loginUser(new LoginDTO(register.getEmail(), register.getPassword())) != null) {
 			return false;
 		}
 		userRepository.save(new User(register));
@@ -25,9 +26,13 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public boolean existUser(String email, String password) {
-		User user = this.userRepository.findByEmailAndPassword(email, password);
-		return (user != null);
+	public LoginDTO loginUser(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			return login;
+		} else {
+			return null;
+		}
 	}
 
 }

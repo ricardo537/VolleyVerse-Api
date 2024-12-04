@@ -11,21 +11,30 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.service.imp.ClubServiceImp;
+import com.tfg.volleyverse.service.imp.UserServiceImp;
 
 @RestController
-@RequestMapping("volleyverse/api/v1/clubs")
-public class ClubController {
+@RequestMapping("volleyverse/api/v1/auth")
+public class AuthController {
 	
 	@Autowired
 	private ClubServiceImp clubService;
 	
-	@PostMapping("/register")
-	public ResponseEntity<Boolean> registerClub (@RequestBody RegisterClubDTO register) {
-		Boolean success = this.clubService.registerClub(register);
-		if (success) {
+	@Autowired
+	private UserServiceImp userService;
+	
+	@PostMapping("/login")
+	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login) {
+		LoginDTO success = this.clubService.loginClub(login);
+		if (success != null) {
 			return new ResponseEntity<>(success, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+			success = this.userService.loginUser(login);
+			if (success != null) {
+				return new ResponseEntity<>(success, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);	
+			}
 		}
 	}
 }

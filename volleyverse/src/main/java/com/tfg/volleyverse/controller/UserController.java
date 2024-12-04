@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
@@ -28,4 +29,5 @@ public class UserController {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }
