@@ -20,6 +20,7 @@ public class UserServiceImp implements UserService {
 		if (existUser(register.getEmail(), register.getPassword())) {
 			return false;
 		}
+		userRepository.save(new User(register));
 		return true;
 	}
 

@@ -22,6 +22,9 @@ public class Club {
 	@Column (nullable = false, unique = true)
 	private String email;
 	
+	@Column (nullable = false)
+	private String password;
+	
 	@Column (nullable = false, unique = true)
 	private String name;
 	
@@ -35,20 +38,20 @@ public class Club {
 		
 	}
 	
-	public Club (String email, String name, String zip_code, String contact) {
-		Club club = new Club();
-		club.setEmail(email);
-		club.setName(name);
-		club.setZip_code(zip_code);
-		club.setContact(contact);
+	public Club (String email, String password, String name, String zip_code, String contact) {
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.zip_code = zip_code;
+		this.contact = contact;
 	}
 	
 	public Club (RegisterClubDTO register) {
-		Club club = new Club();
-		club.setEmail(register.getEmail());
-		club.setName(register.getName());
-		club.setZip_code(register.getZip_code());
-		club.setContact(register.getContact());
+		this.email = register.getEmail();
+		this.password = register.getPassword();
+		this.name = register.getName();
+		this.zip_code = register.getZip_code();
+		this.contact = register.getContact();
 	}
 
 	public String getEmail() {
@@ -57,6 +60,14 @@ public class Club {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getName() {

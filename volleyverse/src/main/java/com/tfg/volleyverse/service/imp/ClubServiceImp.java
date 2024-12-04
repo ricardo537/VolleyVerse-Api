@@ -1,12 +1,14 @@
 package com.tfg.volleyverse.service.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.repository.ClubRepository;
 import com.tfg.volleyverse.service.ClubService;
 
+@Service
 public class ClubServiceImp implements ClubService {
 	
 	@Autowired
