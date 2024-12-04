@@ -2,6 +2,8 @@ package com.tfg.volleyverse.model;
 
 import java.util.UUID;
 
+import com.tfg.volleyverse.dto.RegisterUserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ import jakarta.persistence.Table;
 @Table(name = "user")
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	
 	@Column(nullable = false, unique = true)
@@ -34,18 +36,26 @@ public class User {
 	@Column(nullable = true)
 	private double level;
 
-	public User () {
+	private User () {
 		
 	}
 	
 	public User (String email, String password, String name, String last_name, String description, double level) {
-		User user = new User();
-		user.setEmail(email);
-		user.setPassword(password);
-		user.setName(name);
-		user.setLast_name(last_name);
-		user.setDescription(description);
-		user.setLevel(level);
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.last_name = last_name;
+		this.description = description;
+		this.level = level;
+	}
+	
+	public User (RegisterUserDTO register) {
+		this.email = register.getEmail();
+		this.password = register.getPassword();
+		this.name = register.getName();
+		this.last_name = register.getLast_name();
+		this.description = "";
+		this.level = 0;
 	}
 	
 	public UUID getId() {
