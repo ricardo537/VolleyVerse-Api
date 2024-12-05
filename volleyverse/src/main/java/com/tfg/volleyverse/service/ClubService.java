@@ -11,4 +11,6 @@ public interface ClubService {
 	LoginDTO loginClub (LoginDTO login);
 	
 	LoginDTO updateClub (UpdateClubDTO update);
+	
+	boolean deleteClub (LoginDTO login);
 }

@@ -48,4 +48,14 @@ public class UserServiceImp implements UserService {
 		return null;
 	}
 
+	@Override
+	public boolean deleteUser(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			this.userRepository.delete(user);
+			return true;
+		} 
+		return false;
+	}
+
 }

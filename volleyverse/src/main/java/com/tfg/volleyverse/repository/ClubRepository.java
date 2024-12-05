@@ -13,4 +13,6 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
 	Club findByEmailAndPassword(String email, String password);
 	
 	Club save(Club club);
+	
+	void delete(Club club);
 }
