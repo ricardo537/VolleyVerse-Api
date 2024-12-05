@@ -2,6 +2,7 @@ package com.tfg.volleyverse.service;
 
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
+import com.tfg.volleyverse.dto.UpdateClubDTO;
 
 public interface ClubService {
 
@@ -9,4 +10,5 @@ public interface ClubService {
 	
 	LoginDTO loginClub (LoginDTO login);
 	
+	LoginDTO updateClub (UpdateClubDTO update);
 }

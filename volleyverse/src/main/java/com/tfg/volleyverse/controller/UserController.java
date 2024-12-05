@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
+import com.tfg.volleyverse.dto.UpdateUserDTO;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
 
@@ -24,6 +25,16 @@ public class UserController {
 	public ResponseEntity<Boolean> registerUser (@RequestBody RegisterUserDTO register) {
 		Boolean success = this.userService.registerUser(register);
 		if (success) {
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/update")
+	public ResponseEntity<LoginDTO> updateUser (@RequestBody UpdateUserDTO update) {
+		LoginDTO success = this.userService.updateUser(update);
+		if (success != null) {
 			return new ResponseEntity<>(success, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);

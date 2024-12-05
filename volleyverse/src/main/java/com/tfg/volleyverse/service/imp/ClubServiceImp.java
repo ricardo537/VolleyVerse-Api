@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
+import com.tfg.volleyverse.dto.UpdateClubDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.repository.ClubRepository;
 import com.tfg.volleyverse.service.ClubService;
@@ -33,6 +34,18 @@ public class ClubServiceImp implements ClubService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public LoginDTO updateClub(UpdateClubDTO update) {
+		Club club = this.clubRepository.findByEmailAndPassword(update.getLogin().getEmail(), update.getLogin().getPassword());
+		if (club != null) {
+			club.update(update);
+			if (this.clubRepository.save(club) != null) {
+				return new LoginDTO(update.getEmail(), update.getPassword());
+			}
+		} 
+		return null;
 	}
 
 }
