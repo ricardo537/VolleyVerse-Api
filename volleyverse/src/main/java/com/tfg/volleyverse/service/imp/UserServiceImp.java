@@ -41,11 +41,11 @@ public class UserServiceImp implements UserService {
 		User user = this.userRepository.findByEmailAndPassword(update.getLogin().getEmail(), update.getLogin().getPassword());
 		if (user != null) {
 			user.update(update);
-			this.userRepository.save(user);
-			return new LoginDTO(user.getEmail(), user.getPassword());
-		} else {
-			return null;
-		}
+			if (this.userRepository.save(user) != null) {
+				return new LoginDTO(user.getEmail(), user.getPassword());
+			}
+		} 
+		return null;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.tfg.volleyverse.model;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.RegisterClubDTO;
+import com.tfg.volleyverse.dto.UpdateClubDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,6 +53,24 @@ public class Club {
 		this.name = register.getName();
 		this.zip_code = register.getZip_code();
 		this.contact = register.getContact();
+	}
+	
+	public void update (UpdateClubDTO update) {
+		if (update.getEmail() != null && !update.getEmail().equals("")) {
+			this.email = update.getEmail();
+		}
+		if (update.getPassword() != null && !update.getPassword().equals("")) {
+			this.password = update.getPassword();
+		}
+		if (update.getName() != null && !update.getName().equals("")) {
+			this.name = update.getName();
+		}
+		if (update.getZip_code() != null && !update.getZip_code().equals("")) {
+			this.zip_code = update.getZip_code();
+		}
+		if (update.getContact() != null && !update.getContact().equals("")) {
+			this.contact = update.getContact();
+		}
 	}
 
 	public String getEmail() {
