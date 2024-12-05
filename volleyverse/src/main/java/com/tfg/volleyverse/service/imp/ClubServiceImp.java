@@ -7,6 +7,7 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.dto.UpdateClubDTO;
 import com.tfg.volleyverse.model.Club;
+import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.ClubRepository;
 import com.tfg.volleyverse.service.ClubService;
 
@@ -46,6 +47,16 @@ public class ClubServiceImp implements ClubService {
 			}
 		} 
 		return null;
+	}
+
+	@Override
+	public boolean deleteClub(LoginDTO login) {
+		Club club = this.clubRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (club != null) {
+			this.clubRepository.delete(club);
+			return true;
+		} 
+		return false;
 	}
 
 }

@@ -37,4 +37,30 @@ public class AuthController {
 			}
 		}
 	}
+	
+	@PostMapping("/delete")
+	public ResponseEntity<Boolean> delete (@RequestBody LoginDTO login) {
+		LoginDTO success = this.clubService.loginClub(login);
+		Boolean response = false;
+		if (success != null) {
+			response = this.clubService.deleteClub(login);
+			if (response) {
+				return new ResponseEntity<>(response, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			success = this.userService.loginUser(login);
+			if (success != null) {
+				response = this.userService.deleteUser(login);
+				if (response) {
+					return new ResponseEntity<>(response, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+				}
+			} else {
+				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);	
+			}
+		}
+	}
 }

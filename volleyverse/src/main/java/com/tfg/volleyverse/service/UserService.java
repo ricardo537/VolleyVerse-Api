@@ -13,4 +13,6 @@ public interface UserService {
 	
 	LoginDTO updateUser (UpdateUserDTO update);
 	
+	boolean deleteUser (LoginDTO login);
+	
 }
