@@ -3,6 +3,7 @@ package com.tfg.volleyverse.model;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.RegisterUserDTO;
+import com.tfg.volleyverse.dto.UpdateUserDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +57,24 @@ public class User {
 		this.last_name = register.getLast_name();
 		this.description = "";
 		this.level = 0;
+	}
+	
+	public void update (UpdateUserDTO update) {
+		if (update.getEmail() != null && !update.getEmail().equals("")) {
+			this.email = update.getEmail();
+		}
+		if (update.getPassword() != null && !update.getPassword().equals("")) {
+			this.password = update.getPassword();
+		}
+		if (update.getName() != null && !update.getName().equals("")) {
+			this.name = update.getName();
+		}
+		if (update.getLast_name() != null && !update.getLast_name().equals("")) {
+			this.last_name = update.getLast_name();
+		}
+		if (update.getDescription() != null) {
+			this.description = update.getDescription();
+		}
 	}
 	
 	public UUID getId() {
