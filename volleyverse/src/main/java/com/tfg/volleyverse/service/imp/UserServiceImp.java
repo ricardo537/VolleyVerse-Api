@@ -19,7 +19,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public boolean registerUser(RegisterUserDTO register) {
 		//Falta añadir un try catch en caso de que el email no sea valido
-		if (loginUser(new LoginDTO(register.getEmail(), register.getPassword())) != null) {
+		if (loginUser(new LoginDTO(register.getEmail(), register.getPassword(), "user")) != null) {
 			return false;
 		}
 		userRepository.save(new User(register));
@@ -42,7 +42,7 @@ public class UserServiceImp implements UserService {
 		if (user != null) {
 			user.update(update);
 			if (this.userRepository.save(user) != null) {
-				return new LoginDTO(user.getEmail(), user.getPassword());
+				return new LoginDTO(user.getEmail(), user.getPassword(), "user");
 			}
 		} 
 		return null;

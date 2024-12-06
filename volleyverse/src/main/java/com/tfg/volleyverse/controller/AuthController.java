@@ -25,15 +25,26 @@ public class AuthController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login) {
-		LoginDTO success = this.clubService.loginClub(login);
-		if (success != null) {
-			return new ResponseEntity<>(success, HttpStatus.OK);
-		} else {
-			success = this.userService.loginUser(login);
-			if (success != null) {
-				return new ResponseEntity<>(success, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);	
+		LoginDTO success = null;
+		switch (login.getType()) {
+			case "club" : {
+				success = this.clubService.loginClub(login);
+				if (success != null) {
+					return new ResponseEntity<>(success, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+				}
+			}
+			case "user" : {
+				success = this.userService.loginUser(login);
+				if (success != null) {
+					return new ResponseEntity<>(success, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+				}
+			}
+			default : {
+				return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 			}
 		}
 	}
