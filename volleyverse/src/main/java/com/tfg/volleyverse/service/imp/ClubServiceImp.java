@@ -20,7 +20,7 @@ public class ClubServiceImp implements ClubService {
 	@Override
 	public boolean registerClub(RegisterClubDTO register) {
 		//Hacer excepcion por si la contraseña o el email no son válidos
-		if (loginClub(new LoginDTO(register.getEmail(), register.getPassword())) != null) {
+		if (loginClub(new LoginDTO(register.getEmail(), register.getPassword(), "club")) != null) {
 			return false;
 		}
 		Club club = clubRepository.save(new Club(register));
@@ -43,7 +43,7 @@ public class ClubServiceImp implements ClubService {
 		if (club != null) {
 			club.update(update);
 			if (this.clubRepository.save(club) != null) {
-				return new LoginDTO(update.getEmail(), update.getPassword());
+				return new LoginDTO(update.getEmail(), update.getPassword(), "club");
 			}
 		} 
 		return null;
