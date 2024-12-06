@@ -31,6 +31,9 @@ public class ClubServiceImp implements ClubService {
 	public LoginDTO loginClub(LoginDTO login) {
 		Club club = clubRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (club != null) {
+			if (!login.getType().equals("club")) {
+				login.setType("club");
+			}
 			return login;
 		} else {
 			return null;

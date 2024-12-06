@@ -30,6 +30,9 @@ public class UserServiceImp implements UserService {
 	public LoginDTO loginUser(LoginDTO login) {
 		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (user != null) {
+			if (!login.getType().equals("user")) {
+				login.setType("user");
+			}
 			return login;
 		} else {
 			return null;

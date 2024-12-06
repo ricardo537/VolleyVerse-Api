@@ -44,7 +44,17 @@ public class AuthController {
 				}
 			}
 			default : {
-				return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+				success = this.clubService.loginClub(login);
+				if (success != null) {
+					return new ResponseEntity<>(success, HttpStatus.OK);
+				} else {
+					success = this.userService.loginUser(login);
+					if (success != null) {
+						return new ResponseEntity<>(success, HttpStatus.OK);
+					} else {
+						return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+					}
+				}
 			}
 		}
 	}
