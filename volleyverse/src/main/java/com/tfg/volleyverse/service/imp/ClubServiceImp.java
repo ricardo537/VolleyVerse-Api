@@ -23,8 +23,8 @@ public class ClubServiceImp implements ClubService {
 		if (loginClub(new LoginDTO(register.getEmail(), register.getPassword(), "club")) != null) {
 			return false;
 		}
-		Club club = clubRepository.save(new Club(register));
-		return (club != null);
+		clubRepository.save(new Club(register));
+		return true;
 	}
 
 	@Override
