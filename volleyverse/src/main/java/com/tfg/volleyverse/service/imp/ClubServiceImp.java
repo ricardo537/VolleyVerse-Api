@@ -3,6 +3,7 @@ package com.tfg.volleyverse.service.imp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.dto.UpdateClubDTO;
@@ -60,6 +61,15 @@ public class ClubServiceImp implements ClubService {
 			return true;
 		} 
 		return false;
+	}
+
+	@Override
+	public ClubDTO getClub(LoginDTO login) {
+		Club club = this.clubRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (club != null) {
+			return new ClubDTO(club);
+		}
+		return null;
 	}
 
 }
