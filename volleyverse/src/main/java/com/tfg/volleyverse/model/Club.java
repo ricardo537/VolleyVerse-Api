@@ -21,12 +21,6 @@ public class Club {
 	private UUID id;
 	
 	@Column (nullable = false, unique = true)
-	private String email;
-	
-	@Column (nullable = false)
-	private String password;
-	
-	@Column (nullable = false, unique = true)
 	private String name;
 	
 	@Column (nullable = false)
@@ -39,29 +33,19 @@ public class Club {
 		
 	}
 	
-	public Club (String email, String password, String name, String zip_code, String contact) {
-		this.email = email;
-		this.password = password;
+	public Club (String name, String zip_code, String contact) {
 		this.name = name;
 		this.zip_code = zip_code;
 		this.contact = contact;
 	}
 	
 	public Club (RegisterClubDTO register) {
-		this.email = register.getEmail();
-		this.password = register.getPassword();
 		this.name = register.getName();
 		this.zip_code = register.getZip_code();
 		this.contact = register.getContact();
 	}
 	
 	public void update (UpdateClubDTO update) {
-		if (update.getEmail() != null && !update.getEmail().equals("")) {
-			this.email = update.getEmail();
-		}
-		if (update.getPassword() != null && !update.getPassword().equals("")) {
-			this.password = update.getPassword();
-		}
 		if (update.getName() != null && !update.getName().equals("")) {
 			this.name = update.getName();
 		}
@@ -71,22 +55,6 @@ public class Club {
 		if (update.getContact() != null && !update.getContact().equals("")) {
 			this.contact = update.getContact();
 		}
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getName() {

@@ -12,7 +12,7 @@ import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.service.imp.ClubServiceImp;
-import com.tfg.volleyverse.service.imp.UserServiceImp;
+import com.tfg.volleyverse.service.imp.PlayerServiceImp;
 
 @RestController
 @RequestMapping("volleyverse/api/v1/auth")
@@ -22,46 +22,16 @@ public class AuthController {
 	private ClubServiceImp clubService;
 	
 	@Autowired
-	private UserServiceImp userService;
+	private PlayerServiceImp userService;
 	
 	//Falta cambiarlo para que solo se pueda guardar un email por perfil sea de usuario o de club
 	@PostMapping("/login")
 	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login) {
-		LoginDTO success = null;
-		switch (login.getType()) {
-			case "club" : {
-				success = this.clubService.loginClub(login);
-				if (success != null) {
-					return new ResponseEntity<>(success, HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-				}
-			}
-			case "user" : {
-				success = this.userService.loginUser(login);
-				if (success != null) {
-					return new ResponseEntity<>(success, HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-				}
-			}
-			default : {
-				success = this.clubService.loginClub(login);
-				if (success != null) {
-					return new ResponseEntity<>(success, HttpStatus.OK);
-				} else {
-					success = this.userService.loginUser(login);
-					if (success != null) {
-						return new ResponseEntity<>(success, HttpStatus.OK);
-					} else {
-						return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-					}
-				}
-			}
-		}
+		return new ResponseEntity<LoginDTO>(login, HttpStatus.OK);
 	}
 	
 	//Falta cambiarlo para que filtre según el tipo
+	/*
 	@PostMapping("/delete")
 	public ResponseEntity<Boolean> delete (@RequestBody LoginDTO login) {
 		LoginDTO success = this.clubService.loginClub(login);
@@ -112,5 +82,5 @@ public class AuthController {
 			return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
 		}
 		}
-	}
+	}*/
 }

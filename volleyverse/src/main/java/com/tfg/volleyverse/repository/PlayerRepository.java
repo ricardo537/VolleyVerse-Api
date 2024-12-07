@@ -6,14 +6,15 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tfg.volleyverse.model.Club;
+import com.tfg.volleyverse.model.Player;
 
 @Repository
-public interface ClubRepository extends JpaRepository<Club, UUID> {
+public interface PlayerRepository extends JpaRepository <Player, UUID> {
 
-	Optional<Club> findById(UUID id);
+	Optional<Player> findById(UUID id);
 	
-	Club save(Club club);
+	Player save(Player user);
 	
-	void delete(Club club);
+	void delete(Player user);
+	
 }

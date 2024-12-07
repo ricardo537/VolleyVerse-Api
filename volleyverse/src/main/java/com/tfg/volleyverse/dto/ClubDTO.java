@@ -25,8 +25,6 @@ public class ClubDTO {
 	}
 	
 	public ClubDTO(Club club) {
-		this.email = club.getEmail();
-		this.password = club.getPassword();
 		this.name = club.getName();
 		this.zip_code = club.getZip_code();
 		this.contact = club.getContact();

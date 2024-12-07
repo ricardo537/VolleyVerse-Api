@@ -9,11 +9,5 @@ public interface ClubService {
 
 	boolean registerClub (RegisterClubDTO register);
 	
-	LoginDTO loginClub (LoginDTO login);
-	
 	LoginDTO updateClub (UpdateClubDTO update);
-	
-	boolean deleteClub (LoginDTO login);
-	
-	ClubDTO getClub (LoginDTO login);
 }
