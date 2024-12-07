@@ -3,6 +3,7 @@ package com.tfg.volleyverse.service;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
 import com.tfg.volleyverse.dto.UpdateUserDTO;
+import com.tfg.volleyverse.dto.UserDTO;
 import com.tfg.volleyverse.model.User;
 
 public interface UserService {
@@ -14,5 +15,7 @@ public interface UserService {
 	LoginDTO updateUser (UpdateUserDTO update);
 	
 	boolean deleteUser (LoginDTO login);
+	
+	UserDTO getUser (LoginDTO login);
 	
 }

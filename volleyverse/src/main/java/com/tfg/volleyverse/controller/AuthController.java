@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.service.imp.ClubServiceImp;
@@ -23,6 +24,7 @@ public class AuthController {
 	@Autowired
 	private UserServiceImp userService;
 	
+	//Falta cambiarlo para que solo se pueda guardar un email por perfil sea de usuario o de club
 	@PostMapping("/login")
 	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login) {
 		LoginDTO success = null;
@@ -32,7 +34,7 @@ public class AuthController {
 				if (success != null) {
 					return new ResponseEntity<>(success, HttpStatus.OK);
 				} else {
-					return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
 				}
 			}
 			case "user" : {
@@ -40,7 +42,7 @@ public class AuthController {
 				if (success != null) {
 					return new ResponseEntity<>(success, HttpStatus.OK);
 				} else {
-					return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
 				}
 			}
 			default : {
@@ -52,13 +54,14 @@ public class AuthController {
 					if (success != null) {
 						return new ResponseEntity<>(success, HttpStatus.OK);
 					} else {
-						return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
 					}
 				}
 			}
 		}
 	}
 	
+	//Falta cambiarlo para que filtre según el tipo
 	@PostMapping("/delete")
 	public ResponseEntity<Boolean> delete (@RequestBody LoginDTO login) {
 		LoginDTO success = this.clubService.loginClub(login);
@@ -68,7 +71,7 @@ public class AuthController {
 			if (response) {
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 			}
 		} else {
 			success = this.userService.loginUser(login);
@@ -80,8 +83,34 @@ public class AuthController {
 					return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 				}
 			} else {
-				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);	
+				return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);	
 			}
+		}
+	}
+	
+	@PostMapping("/getProfile")
+	public ResponseEntity<Object> getProfile (@RequestBody LoginDTO login) {
+		Object success = null;
+		switch (login.getType()) {
+		case ("club"): {
+			success = this.clubService.getClub(login);
+			if (success != null) {
+				return new ResponseEntity<>(success, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
+			}
+		}
+		case ("user"): {
+			success = this.userService.getUser(login);
+			if (success != null) {
+				return new ResponseEntity<>(success, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
+			}
+		}
+		default: {
+			return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
+		}
 		}
 	}
 }
