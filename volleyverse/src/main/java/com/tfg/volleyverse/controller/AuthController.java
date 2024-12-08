@@ -36,30 +36,13 @@ public class AuthController {
 		return new ResponseEntity<Boolean>(success, HttpStatus.NOT_FOUND);
 	}
 	
-	/*
+	
 	@PostMapping("/getProfile")
 	public ResponseEntity<Object> getProfile (@RequestBody LoginDTO login) {
-		Object success = null;
-		switch (login.getType()) {
-		case ("club"): {
-			success = this.clubService.getClub(login);
-			if (success != null) {
-				return new ResponseEntity<>(success, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-			}
+		Object success = this.userService.getUserData(login);
+		if (success != null) {
+			return new ResponseEntity<Object>(success, HttpStatus.OK);
 		}
-		case ("user"): {
-			success = this.userService.getUser(login);
-			if (success != null) {
-				return new ResponseEntity<>(success, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-			}
-		}
-		default: {
-			return new ResponseEntity<>(success, HttpStatus.NOT_FOUND);
-		}
-		}
-	}*/
+		return new ResponseEntity<Object>(success, HttpStatus.NOT_FOUND);
+	}
 }

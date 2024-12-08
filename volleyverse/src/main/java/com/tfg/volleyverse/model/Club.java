@@ -26,7 +26,7 @@ public class Club {
 	@Column (nullable = false)
 	private String zip_code;
 	
-	@Column (nullable = false, unique = true)
+	@Column (nullable = false)
 	private String contact;
 	
 	private Club () {

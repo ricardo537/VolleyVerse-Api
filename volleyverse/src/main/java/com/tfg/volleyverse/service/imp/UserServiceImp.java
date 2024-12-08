@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.dto.PlayerDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.User;
@@ -64,7 +66,25 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public Object getUserData(LoginDTO login) {
-		// TODO Auto-generated method stub
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			switch (login.getType()) {
+			case "club": {
+				Optional<Club> club = this.clubRepository.findById(user.getId_user());
+				if (club.isEmpty()) {
+					return null;
+				}
+				return new ClubDTO (club.get());
+			}
+			default : {
+				Optional<Player> player = this.playerRepository.findById(user.getId_user());
+				if (player.isEmpty()) {
+					return null;
+				}
+				return new PlayerDTO (player.get());
+			}
+			}
+		}
 		return null;
 	}
 

@@ -2,12 +2,9 @@ package com.tfg.volleyverse.dto;
 
 import com.tfg.volleyverse.model.Player;
 
-import jakarta.persistence.Column;
 
 public class PlayerDTO {
 	
-	private String email;
-	private String password;
 	private String name;
 	private String last_name;
 	private String description;
@@ -17,9 +14,7 @@ public class PlayerDTO {
 		
 	}
 	
-	public PlayerDTO(String email, String password, String name, String last_name, String description, double level) {
-		this.email = email;
-		this.password = password;
+	public PlayerDTO(String name, String last_name, String description, double level) {
 		this.name = name;
 		this.last_name = last_name;
 		this.description = description;
@@ -28,27 +23,11 @@ public class PlayerDTO {
 
 
 
-	public PlayerDTO (Player user) {
-		this.name = user.getName();
-		this.last_name = user.getLast_name();
-		this.description = user.getDescription();
-		this.level = user.getLevel();
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
+	public PlayerDTO (Player player) {
+		this.name = player.getName();
+		this.last_name = player.getLast_name();
+		this.description = player.getDescription();
+		this.level = player.getLevel();
 	}
 
 	public String getName() {
