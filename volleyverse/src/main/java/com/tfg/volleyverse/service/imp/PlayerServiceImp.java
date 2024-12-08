@@ -5,42 +5,41 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
-import com.tfg.volleyverse.dto.RegisterClubDTO;
+import com.tfg.volleyverse.dto.RegisterPlayerDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
-import com.tfg.volleyverse.dto.UpdateClubDTO;
-import com.tfg.volleyverse.model.Club;
+import com.tfg.volleyverse.dto.UpdatePlayerDTO;
+import com.tfg.volleyverse.dto.PlayerDTO;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.User;
-import com.tfg.volleyverse.repository.ClubRepository;
+import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.UserRepository;
-import com.tfg.volleyverse.service.ClubService;
+import com.tfg.volleyverse.service.PlayerService;
 
 @Service
-public class ClubServiceImp implements ClubService {
+public class PlayerServiceImp implements PlayerService {
 	
 	@Autowired
-	private ClubRepository clubRepository;
+	private PlayerRepository playerRepository;
 	@Autowired
 	private UserRepository userRepository;
 
 	@Override
-	public boolean registerClub(RegisterClubDTO register) {
-		Club club = this.clubRepository.save(new Club(register));
-		if (club != null) {
-			User user = this.userRepository.save(new User(new RegisterUserDTO(register.getEmail(), register.getPassword(), "club", club.getId())));
+	public boolean registerPlayer(RegisterPlayerDTO register) {
+		Player player = this.playerRepository.save(new Player(register));
+		if (player != null) {
+			User user = this.userRepository.save(new User(new RegisterUserDTO(register.getEmail(), register.getPassword(), "player", player.getId())));
 			if (user != null) {
 				return true;
 			} else {
-				this.clubRepository.delete(club);
+				this.playerRepository.delete(player);
 			}
-		}
+		} 
 		return false;
 	}
 
 	@Override
-	public LoginDTO updateClub(UpdateClubDTO update) {
+	public LoginDTO updatePlayer(UpdatePlayerDTO update) {
 		User user = this.userRepository.findByEmailAndPassword(update.getLogin().getEmail(), update.getLogin().getPassword());
 		if (user != null) {
 			if (!update.getEmail().equals(update.getLogin().getEmail())) {
@@ -49,28 +48,31 @@ public class ClubServiceImp implements ClubService {
 					this.userRepository.delete(user);
 					user.setEmail(update.getEmail());
 					user.setPassword(update.getPassword());
-					Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
-					if (clubOp.isPresent()) {
+					Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
+					if (playerOp.isPresent()) {
 						user = this.userRepository.save(user);
-						Club club = clubOp.get();
-						club.update(update);
-						this.clubRepository.save(club);
+						Player player = playerOp.get();
+						player.update(update);
+						this.playerRepository.save(player);
 						return new LoginDTO(user);
 					}
 				}
 			} else {
 				user.setPassword(update.getPassword());
-				Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
-				if (clubOp.isPresent()) {
+				Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
+				if (playerOp.isPresent()) {
 					user = this.userRepository.save(user);
-					Club club = clubOp.get();
-					club.update(update);
-					this.clubRepository.save(club);
+					Player player = playerOp.get();
+					player.update(update);
+					this.playerRepository.save(player);
 					return new LoginDTO(user);
 				}
+				
 			}
 		}
 		return null;
 	}
+
+	
 
 }

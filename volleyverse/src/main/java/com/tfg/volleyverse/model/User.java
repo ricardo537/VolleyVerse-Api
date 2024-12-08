@@ -3,22 +3,17 @@ package com.tfg.volleyverse.model;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.RegisterUserDTO;
-import com.tfg.volleyverse.dto.UpdateUserDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
 public class User {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
-	
 	@Column(nullable = false, unique = true)
 	private String email;
 	
@@ -26,59 +21,28 @@ public class User {
 	private String password;
 	
 	@Column(nullable = false)
-	private String name;
+	private String type;
 	
 	@Column(nullable = false)
-	private String last_name;
+	private UUID id_user;
 	
-	@Column(nullable = true)
-	private String description;
-	
-	@Column(nullable = true)
-	private double level;
-
 	private User () {
 		
 	}
-	
-	public User (String email, String password, String name, String last_name, String description, double level) {
+
+	public User(String email, String password, String type, UUID id_user) {
+		super();
 		this.email = email;
 		this.password = password;
-		this.name = name;
-		this.last_name = last_name;
-		this.description = description;
-		this.level = level;
+		this.type = type;
+		this.id_user = id_user;
 	}
 	
-	public User (RegisterUserDTO register) {
+	public User(RegisterUserDTO register) {
 		this.email = register.getEmail();
 		this.password = register.getPassword();
-		this.name = register.getName();
-		this.last_name = register.getLast_name();
-		this.description = "";
-		this.level = 0;
-	}
-	
-	public void update (UpdateUserDTO update) {
-		if (update.getEmail() != null && !update.getEmail().equals("")) {
-			this.email = update.getEmail();
-		}
-		if (update.getPassword() != null && !update.getPassword().equals("")) {
-			this.password = update.getPassword();
-		}
-		if (update.getName() != null && !update.getName().equals("")) {
-			this.name = update.getName();
-		}
-		if (update.getLast_name() != null && !update.getLast_name().equals("")) {
-			this.last_name = update.getLast_name();
-		}
-		if (update.getDescription() != null) {
-			this.description = update.getDescription();
-		}
-	}
-	
-	public UUID getId() {
-		return id;
+		this.type = register.getType();
+		this.id_user = register.getId_user();
 	}
 
 	public String getEmail() {
@@ -97,37 +61,20 @@ public class User {
 		this.password = password;
 	}
 
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public UUID getId_user() {
+		return id_user;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setId_user(UUID id_user) {
+		this.id_user = id_user;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public double getLevel() {
-		return level;
-	}
-
-	public void setLevel(double level) {
-		this.level = level;
-	}
-	
 	
 }

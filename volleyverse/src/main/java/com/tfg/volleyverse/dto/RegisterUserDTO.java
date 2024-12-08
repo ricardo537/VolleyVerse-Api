@@ -1,21 +1,24 @@
 package com.tfg.volleyverse.dto;
 
+import java.util.UUID;
+
 public class RegisterUserDTO {
 
 	private String email;
 	private String password;
-	private String name;
-	private String last_name;
+	private String type;
+	private UUID id_user;
 	
-	RegisterUserDTO () {
+	private RegisterUserDTO () {
 		
 	}
-	
-	RegisterUserDTO (String email, String password, String name, String last_name) {
+
+	public RegisterUserDTO(String email, String password, String type, UUID id_user) {
+		super();
 		this.email = email;
 		this.password = password;
-		this.name = name;
-		this.last_name = last_name;
+		this.type = type;
+		this.id_user = id_user;
 	}
 
 	public String getEmail() {
@@ -34,20 +37,19 @@ public class RegisterUserDTO {
 		this.password = password;
 	}
 
-	public String getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public UUID getId_user() {
+		return id_user;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setId_user(UUID id_user) {
+		this.id_user = id_user;
 	}
-	
 }

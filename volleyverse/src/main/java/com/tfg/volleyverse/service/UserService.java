@@ -2,20 +2,12 @@ package com.tfg.volleyverse.service;
 
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
-import com.tfg.volleyverse.dto.UpdateUserDTO;
-import com.tfg.volleyverse.dto.UserDTO;
-import com.tfg.volleyverse.model.User;
 
 public interface UserService {
 
-	boolean registerUser (RegisterUserDTO register);
+	LoginDTO login (LoginDTO login);
 	
-	LoginDTO loginUser (LoginDTO login);
+	boolean delete (LoginDTO login);
 	
-	LoginDTO updateUser (UpdateUserDTO update);
-	
-	boolean deleteUser (LoginDTO login);
-	
-	UserDTO getUser (LoginDTO login);
-	
+	Object getUserData (LoginDTO login);
 }

@@ -1,13 +1,18 @@
 package com.tfg.volleyverse.service.imp;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
-import com.tfg.volleyverse.dto.RegisterUserDTO;
-import com.tfg.volleyverse.dto.UpdateUserDTO;
-import com.tfg.volleyverse.dto.UserDTO;
+import com.tfg.volleyverse.dto.PlayerDTO;
+import com.tfg.volleyverse.model.Club;
+import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.User;
+import com.tfg.volleyverse.repository.ClubRepository;
+import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.UserRepository;
 import com.tfg.volleyverse.service.UserService;
 
@@ -16,57 +21,69 @@ public class UserServiceImp implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private PlayerRepository playerRepository;
+	@Autowired
+	private ClubRepository clubRepository;
 
 	@Override
-	public boolean registerUser(RegisterUserDTO register) {
-		//Falta añadir un try catch en caso de que el email no sea valido
-		if (loginUser(new LoginDTO(register.getEmail(), register.getPassword(), "user")) != null) {
-			return false;
-		}
-		userRepository.save(new User(register));
-		return true;
-	}
-
-	@Override
-	public LoginDTO loginUser(LoginDTO login) {
+	public LoginDTO login(LoginDTO login) {
 		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (user != null) {
-			if (!login.getType().equals("user")) {
-				login.setType("user");
-			}
-			return login;
-		} else {
-			return null;
+			return new LoginDTO(user);
 		}
-	}
-
-	@Override
-	public LoginDTO updateUser(UpdateUserDTO update) {
-		User user = this.userRepository.findByEmailAndPassword(update.getLogin().getEmail(), update.getLogin().getPassword());
-		if (user != null) {
-			user.update(update);
-			if (this.userRepository.save(user) != null) {
-				return new LoginDTO(user.getEmail(), user.getPassword(), "user");
-			}
-		} 
 		return null;
 	}
 
 	@Override
-	public boolean deleteUser(LoginDTO login) {
+	public boolean delete(LoginDTO login) {
 		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (user != null) {
+			//Cuando pongo otro case "player" no funciona hay que revisarlo
+			switch(login.getType()) {
+			case ("club") : {
+				Optional<Club> club = this.clubRepository.findById(user.getId_user());
+				if (club.isEmpty()) {
+					return false;
+				}
+				this.clubRepository.delete(club.get());
+				break;
+			}
+			default : {
+				Optional<Player> player = this.playerRepository.findById(user.getId_user());
+				if (player.isEmpty()) {
+					return false;
+				}
+				this.playerRepository.delete(player.get());
+				break;
+			}
+			}
 			this.userRepository.delete(user);
 			return true;
-		} 
+		}
 		return false;
 	}
 
 	@Override
-	public UserDTO getUser(LoginDTO login) {
+	public Object getUserData(LoginDTO login) {
 		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (user != null) {
-			return new UserDTO(user);
+			switch (login.getType()) {
+			case "club": {
+				Optional<Club> club = this.clubRepository.findById(user.getId_user());
+				if (club.isEmpty()) {
+					return null;
+				}
+				return new ClubDTO (club.get());
+			}
+			default : {
+				Optional<Player> player = this.playerRepository.findById(user.getId_user());
+				if (player.isEmpty()) {
+					return null;
+				}
+				return new PlayerDTO (player.get());
+			}
+			}
 		}
 		return null;
 	}

@@ -1,5 +1,7 @@
 package com.tfg.volleyverse.dto;
 
+import com.tfg.volleyverse.model.User;
+
 public class LoginDTO {
 
 	private String email;
@@ -14,6 +16,12 @@ public class LoginDTO {
 		this.email = email;
 		this.password = password;
 		this.type = type;
+	}
+	
+	public LoginDTO (User user) {
+		this.email = user.getEmail();
+		this.password = user.getPassword();
+		this.type = user.getType();
 	}
 
 	public String getEmail() {

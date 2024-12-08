@@ -9,42 +9,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.LoginDTO;
-import com.tfg.volleyverse.dto.RegisterClubDTO;
-import com.tfg.volleyverse.dto.UpdateClubDTO;
-import com.tfg.volleyverse.service.imp.ClubServiceImp;
+import com.tfg.volleyverse.dto.RegisterPlayerDTO;
+import com.tfg.volleyverse.dto.UpdatePlayerDTO;
+import com.tfg.volleyverse.model.Player;
+import com.tfg.volleyverse.service.imp.PlayerServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
 
 @RestController
-@RequestMapping("volleyverse/api/v1/clubs")
-public class ClubController {
-	
+@RequestMapping("/volleyverse/api/v1/players")
+public class PlayerController {
+
 	@Autowired
-	private ClubServiceImp clubService;
+	private PlayerServiceImp playerService;
 	@Autowired
 	private UserServiceImp userService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<Boolean> registerClub (@RequestBody RegisterClubDTO register) {
+	public ResponseEntity<Boolean> registerUser (@RequestBody RegisterPlayerDTO register) {
 		LoginDTO foundUser = this.userService.login(new LoginDTO(register.getEmail(), register.getPassword(), "player"));
 		Boolean success = false;
 		if (foundUser == null) {
-			success = this.clubService.registerClub(register);
+			success = this.playerService.registerPlayer(register);
 			if (success) {
 				return new ResponseEntity<>(success, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
-			}
-		}
+			} 
+		} 
 		return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
+
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<LoginDTO> updateClub (@RequestBody UpdateClubDTO update) {
-		LoginDTO success = this.clubService.updateClub(update);
+	public ResponseEntity<LoginDTO> updateUser (@RequestBody UpdatePlayerDTO update) {
+		LoginDTO success = this.playerService.updatePlayer(update);
 		if (success != null) {
 			return new ResponseEntity<>(success, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }
