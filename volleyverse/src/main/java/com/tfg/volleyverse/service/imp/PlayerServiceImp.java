@@ -46,8 +46,12 @@ public class PlayerServiceImp implements PlayerService {
 				User userExist = this.userRepository.findByEmail(update.getEmail());
 				if (userExist == null) {
 					this.userRepository.delete(user);
-					user.setEmail(update.getEmail());
-					user.setPassword(update.getPassword());
+					if (update.getEmail() != null && !update.getEmail().equals("")) {
+						user.setEmail(update.getEmail());
+					}
+					if (update.getPassword() != null && !update.getPassword().equals("")) {
+						user.setPassword(update.getPassword());
+					}
 					Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
 					if (playerOp.isPresent()) {
 						user = this.userRepository.save(user);
@@ -58,7 +62,9 @@ public class PlayerServiceImp implements PlayerService {
 					}
 				}
 			} else {
-				user.setPassword(update.getPassword());
+				if (update.getPassword() != null && !update.getPassword().equals("")) {
+					user.setPassword(update.getPassword());
+				}
 				Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
 				if (playerOp.isPresent()) {
 					user = this.userRepository.save(user);

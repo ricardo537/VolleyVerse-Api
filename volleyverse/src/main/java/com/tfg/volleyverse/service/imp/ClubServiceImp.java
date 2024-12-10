@@ -47,8 +47,12 @@ public class ClubServiceImp implements ClubService {
 				User userExist = this.userRepository.findByEmail(update.getEmail());
 				if (userExist == null) {
 					this.userRepository.delete(user);
-					user.setEmail(update.getEmail());
-					user.setPassword(update.getPassword());
+					if (update.getEmail() != null && !update.getEmail().equals("")) {
+						user.setEmail(update.getEmail());
+					}
+					if (update.getPassword() != null && !update.getPassword().equals("")) {
+						user.setPassword(update.getPassword());
+					}
 					Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
 					if (clubOp.isPresent()) {
 						user = this.userRepository.save(user);
@@ -59,7 +63,9 @@ public class ClubServiceImp implements ClubService {
 					}
 				}
 			} else {
-				user.setPassword(update.getPassword());
+				if (update.getPassword() != null && !update.getPassword().equals("")) {
+					user.setPassword(update.getPassword());
+				}
 				Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
 				if (clubOp.isPresent()) {
 					user = this.userRepository.save(user);
