@@ -40,12 +40,12 @@ public class StorageServiceImp implements StorageService {
 	}
 
 	@Override
-	public String store(MultipartFile file) {
+	public String store(MultipartFile file, String email) {
 		try {
 			if (file.isEmpty()) {
 				throw new RuntimeException("Failed to store empty file");
 			}
-			String fileName = file.getOriginalFilename();
+			String fileName = email + file.getOriginalFilename();
 			Path destinationFile = rootLocation.resolve(Paths.get(fileName))
 					.normalize().toAbsolutePath();
 			try (InputStream inputStream = file.getInputStream()){

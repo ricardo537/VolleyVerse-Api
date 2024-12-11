@@ -26,16 +26,19 @@ public class User {
 	@Column(nullable = false)
 	private UUID id_user;
 	
+	@Column(nullable = true)
+	private String img;
+	
 	private User () {
 		
 	}
 
-	public User(String email, String password, String type, UUID id_user) {
-		super();
+	public User(String email, String password, String type, UUID id_user, String img) {
 		this.email = email;
 		this.password = password;
 		this.type = type;
 		this.id_user = id_user;
+		this.img = img;
 	}
 	
 	public User(RegisterUserDTO register) {
@@ -43,6 +46,14 @@ public class User {
 		this.password = register.getPassword();
 		this.type = register.getType();
 		this.id_user = register.getId_user();
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public String getEmail() {

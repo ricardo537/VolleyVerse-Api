@@ -8,7 +8,7 @@ public interface StorageService {
 
 	void init();
 	
-	String store(MultipartFile file);
+	String store(MultipartFile file, String email);
 	
 	Resource loadAsResource(String fileName);
 }

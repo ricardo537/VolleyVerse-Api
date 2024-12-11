@@ -81,11 +81,23 @@ public class UserServiceImp implements UserService {
 				if (player.isEmpty()) {
 					return null;
 				}
-				return new PlayerDTO (player.get());
+				return new PlayerDTO (player.get(), user.getImg());
 			}
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean updateProfileImg(String email, String fileName) {
+		User user = this.userRepository.findByEmail(email);
+		if (user != null) {
+			this.userRepository.delete(user);
+			user.setImg(fileName);
+			this.userRepository.save(user);
+			return true;
+		}
+		return false;
 	}
 
 }
