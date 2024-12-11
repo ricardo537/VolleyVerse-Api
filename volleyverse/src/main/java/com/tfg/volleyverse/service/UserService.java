@@ -10,4 +10,6 @@ public interface UserService {
 	boolean delete (LoginDTO login);
 	
 	Object getUserData (LoginDTO login);
+	
+	boolean updateProfileImg (String email, String fileName);
 }

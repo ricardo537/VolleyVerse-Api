@@ -60,7 +60,7 @@ public class Player {
 			this.description = update.getDescription();
 		}
 	}
-	
+
 	public UUID getId() {
 		return id;
 	}

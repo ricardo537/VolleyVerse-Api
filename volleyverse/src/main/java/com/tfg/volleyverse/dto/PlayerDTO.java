@@ -9,6 +9,7 @@ public class PlayerDTO {
 	private String last_name;
 	private String description;
 	private double level;
+	private String img;
 	
 	public PlayerDTO () {
 		
@@ -23,11 +24,20 @@ public class PlayerDTO {
 
 
 
-	public PlayerDTO (Player player) {
+	public PlayerDTO (Player player, String img) {
 		this.name = player.getName();
 		this.last_name = player.getLast_name();
 		this.description = player.getDescription();
 		this.level = player.getLevel();
+		this.img = img;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public String getName() {
