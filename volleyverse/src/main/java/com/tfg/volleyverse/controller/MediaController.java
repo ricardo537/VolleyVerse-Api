@@ -40,15 +40,14 @@ public class MediaController {
 	@PostMapping("upload/profile/{email}")
 	public Map<String, String> uploadFile(@RequestParam("file") MultipartFile multipartFile, @PathVariable String email) {
 		String path = this.storageService.store(multipartFile, email);
-		String[] paths = path.split("/");
-		boolean success = this.userService.updateProfileImg(email, paths[paths.length-1]);
+		String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+		String url = ServletUriComponentsBuilder
+				.fromHttpUrl(host)
+				.path("/volleyverse/api/v1/media/")
+				.path(path)
+				.toUriString();
+		boolean success = this.userService.updateProfileImg(email, url);
 		if (success) {
-			String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-			String url = ServletUriComponentsBuilder
-					.fromHttpUrl(host)
-					.path("/volleyverse/api/v1/media/")
-					.path(path)
-					.toUriString();
 			return Map.of("url", url);
 		}
 		return Map.of("url", "");
