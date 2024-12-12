@@ -53,7 +53,7 @@ public class ClubServiceImp implements ClubService {
 					if (update.getPassword() != null && !update.getPassword().equals("")) {
 						user.setPassword(update.getPassword());
 					}
-					Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
+					Optional<Club> clubOp = this.clubRepository.findById(user.getIde());
 					if (clubOp.isPresent()) {
 						user = this.userRepository.save(user);
 						Club club = clubOp.get();
@@ -66,7 +66,7 @@ public class ClubServiceImp implements ClubService {
 				if (update.getPassword() != null && !update.getPassword().equals("")) {
 					user.setPassword(update.getPassword());
 				}
-				Optional<Club> clubOp = this.clubRepository.findById(user.getId_user());
+				Optional<Club> clubOp = this.clubRepository.findById(user.getIde());
 				if (clubOp.isPresent()) {
 					user = this.userRepository.save(user);
 					Club club = clubOp.get();

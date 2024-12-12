@@ -1,5 +1,7 @@
 package com.tfg.volleyverse.repository;
 
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	User save (User user);
 	
 	void delete(User user);
+	
+	User findByIde(UUID id_user);
 }

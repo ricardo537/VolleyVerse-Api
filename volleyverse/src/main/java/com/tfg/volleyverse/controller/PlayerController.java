@@ -1,14 +1,19 @@
 package com.tfg.volleyverse.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.RegisterPlayerDTO;
 import com.tfg.volleyverse.dto.UpdatePlayerDTO;
 import com.tfg.volleyverse.model.Player;
@@ -46,6 +51,16 @@ public class PlayerController {
 		} else {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping("/search") 
+	public ResponseEntity<List<PlayerResumeDTO>> searchPlayers (@RequestParam String name) {
+		List<PlayerResumeDTO> success = this.playerService.searchPlayers(name);
+		if (success.isEmpty()) {
+			return new ResponseEntity<List<PlayerResumeDTO>>(success, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<PlayerResumeDTO>>(success, HttpStatus.OK);
+		
 	}
 	
 }

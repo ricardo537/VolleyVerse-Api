@@ -23,8 +23,8 @@ public class User {
 	@Column(nullable = false)
 	private String type;
 	
-	@Column(nullable = false)
-	private UUID id_user;
+	@Column(nullable = false, unique = true)
+	private UUID ide;
 	
 	@Column(nullable = true)
 	private String img;
@@ -33,11 +33,11 @@ public class User {
 		
 	}
 
-	public User(String email, String password, String type, UUID id_user, String img) {
+	public User(String email, String password, String type, UUID ide, String img) {
 		this.email = email;
 		this.password = password;
 		this.type = type;
-		this.id_user = id_user;
+		this.ide = ide;
 		this.img = img;
 	}
 	
@@ -45,7 +45,7 @@ public class User {
 		this.email = register.getEmail();
 		this.password = register.getPassword();
 		this.type = register.getType();
-		this.id_user = register.getId_user();
+		this.ide = register.getId_user();
 	}
 
 	public String getImg() {
@@ -80,12 +80,12 @@ public class User {
 		this.type = type;
 	}
 
-	public UUID getId_user() {
-		return id_user;
+	public UUID getIde() {
+		return ide;
 	}
 
-	public void setId_user(UUID id_user) {
-		this.id_user = id_user;
+	public void setIde(UUID ide) {
+		this.ide = ide;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,4 +18,5 @@ public interface PlayerRepository extends JpaRepository <Player, UUID> {
 	
 	void delete(Player user);
 	
+	List<Player> findByNameStartingWithAndLastNameStartingWith(String name, String last_name);
 }
