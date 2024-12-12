@@ -42,7 +42,7 @@ public class UserServiceImp implements UserService {
 			//Cuando pongo otro case "player" no funciona hay que revisarlo
 			switch(login.getType()) {
 			case ("club") : {
-				Optional<Club> club = this.clubRepository.findById(user.getId_user());
+				Optional<Club> club = this.clubRepository.findById(user.getIde());
 				if (club.isEmpty()) {
 					return false;
 				}
@@ -50,7 +50,7 @@ public class UserServiceImp implements UserService {
 				break;
 			}
 			default : {
-				Optional<Player> player = this.playerRepository.findById(user.getId_user());
+				Optional<Player> player = this.playerRepository.findById(user.getIde());
 				if (player.isEmpty()) {
 					return false;
 				}
@@ -70,14 +70,14 @@ public class UserServiceImp implements UserService {
 		if (user != null) {
 			switch (login.getType()) {
 			case "club": {
-				Optional<Club> club = this.clubRepository.findById(user.getId_user());
+				Optional<Club> club = this.clubRepository.findById(user.getIde());
 				if (club.isEmpty()) {
 					return null;
 				}
 				return new ClubDTO (club.get());
 			}
 			default : {
-				Optional<Player> player = this.playerRepository.findById(user.getId_user());
+				Optional<Player> player = this.playerRepository.findById(user.getIde());
 				if (player.isEmpty()) {
 					return null;
 				}
