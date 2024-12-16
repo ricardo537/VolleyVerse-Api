@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.model.Play;
@@ -42,5 +43,17 @@ public class TeamController {
 			}
 		}
 		return new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+	}
+	
+	@PostMapping("/addPlayer")
+	public ResponseEntity<Boolean> addPlayerToTeam(@RequestBody AddPlayerToTeamDTO playerToTeam) {
+		LoginDTO user = this.userService.login(playerToTeam.getLogin());
+		if (user != null) {
+			Boolean success = this.playService.addPlayer(new Play(playerToTeam.getTeamId(), playerToTeam.getPlayerId()));
+			if (success) {
+				return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.PlayId;
 import com.tfg.volleyverse.repository.PlayRepository;
@@ -19,9 +20,12 @@ public class PlayServiceImp implements PlayService {
 
 	@Override
 	public boolean addPlayer(Play play) {
-		Play success = this.playRepository.save(play);
-		if (success != null) {
-			return true;
+		Optional<Play> playExists = this.playRepository.findById(new PlayId(play));
+		if (playExists.isEmpty()) {
+			Play success = this.playRepository.save(play);
+			if (success != null) {
+				return true;
+			}
 		}
 		return false;
 	}

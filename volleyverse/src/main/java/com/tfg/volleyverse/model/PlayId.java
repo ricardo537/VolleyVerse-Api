@@ -17,6 +17,11 @@ public class PlayId implements Serializable {
 		this.teamId = teamId;
 		this.playerId = playerId;
 	}
+	
+	public PlayId(Play play) {
+		this.teamId = play.getTeamId();
+		this.playerId = play.getPlayerId();
+	}
 
 	public UUID getTeamId() {
 		return teamId;
