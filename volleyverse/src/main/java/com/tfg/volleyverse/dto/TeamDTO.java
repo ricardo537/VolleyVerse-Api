@@ -12,19 +12,19 @@ public class TeamDTO {
 	private String name;
 	private String category;
 	private String type;
-	private UUID club_id;
+	private UUID clubId;
 	private List<PlayerResumeDTO> members;
 	
 	public TeamDTO() {
 		
 	}
 
-	public TeamDTO(UUID id, String name, String category, String type, UUID club_id, List<PlayerResumeDTO> members) {
+	public TeamDTO(UUID id, String name, String category, String type, UUID clubId, List<PlayerResumeDTO> members) {
 		this.id = id;
 		this.name = name;
 		this.category = category;
 		this.type = type;
-		this.club_id = club_id;
+		this.clubId = clubId;
 		this.members = members;
 	}
 	
@@ -33,7 +33,7 @@ public class TeamDTO {
 		this.name = team.getName();
 		this.category = team.getCategory();
 		this.type = team.getType();
-		this.club_id = team.getClubId();
+		this.clubId = team.getClubId();
 		this.members = members;
 	}
 
@@ -61,12 +61,12 @@ public class TeamDTO {
 		this.type = type;
 	}
 
-	public UUID getClub_id() {
-		return club_id;
+	public UUID getClubId() {
+		return clubId;
 	}
 
-	public void setClub_id(UUID club_id) {
-		this.club_id = club_id;
+	public void setClubId(UUID clubId) {
+		this.clubId = clubId;
 	}
 
 	public List<PlayerResumeDTO> getMembers() {

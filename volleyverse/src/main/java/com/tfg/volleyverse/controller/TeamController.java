@@ -41,7 +41,7 @@ public class TeamController {
 		if (user != null) {
 			UUID success = this.teamService.createTeam(team);
 			if (success != null) {
-				if (team.getLogin().getType().equals("user")) {
+				if (user.getType().equals("player")) {
 					UUID userId = this.userService.findUser(user).getIde();
 					this.playService.addPlayer(new Play(success, userId));
 				}
