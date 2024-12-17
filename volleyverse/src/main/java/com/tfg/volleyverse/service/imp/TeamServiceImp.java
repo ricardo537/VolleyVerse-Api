@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
+import com.tfg.volleyverse.dto.TeamDTO;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.Team;
@@ -36,7 +37,7 @@ public class TeamServiceImp implements TeamService {
 	@Override
 	public UUID createTeam(TeamCreationDTO team) {
 		UUID club_id = this.getClubId(team.getLogin());
-		team.setClub_id(club_id);
+		team.setClubId(club_id);
 		Team teamSaved = this.teamRepository.save(new Team(team));
 		if (teamSaved != null) {
 			return teamSaved.getId();
@@ -74,6 +75,42 @@ public class TeamServiceImp implements TeamService {
 			return players;
 		}
 		return List.of();
+	}
+
+	@Override
+	public List<TeamDTO> getTeams(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			if (user.getType().equals("club")) {
+				List<Team> teamsClub = this.teamRepository.findByClubId(user.getIde());
+				List<TeamDTO> teams = teamsClub.stream()
+						.map(team -> collectClubTeamData(team))
+						.collect(Collectors.toList());
+				return teams;
+			} else {
+				List<Play> plays = this.playRepository.findByPlayerId(user.getIde());
+				List<TeamDTO> teams = plays.stream()
+						.map(play -> collectTeamData(play))
+						.filter(p -> p != null)
+						.collect(Collectors.toList());
+				return teams;
+			}
+		}
+		return List.of();
+	}
+	
+	private TeamDTO collectTeamData(Play play) {
+		Team team = this.teamRepository.getById(play.getTeamId());
+		if (team != null) {
+			List<PlayerResumeDTO> players = getMembersOfTeam(play.getTeamId());
+			return new TeamDTO(team, players);
+		}
+		return null;
+	}
+	
+	private TeamDTO collectClubTeamData(Team team) {
+		List<PlayerResumeDTO> players = getMembersOfTeam(team.getId());
+		return new TeamDTO(team, players);
 	}
 
 }

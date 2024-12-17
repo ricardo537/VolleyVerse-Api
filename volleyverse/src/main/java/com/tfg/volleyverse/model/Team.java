@@ -25,24 +25,24 @@ public class Team {
 	@Column(nullable = false)
 	private String type;
 	@Column(nullable = true)
-	private UUID club_id;
+	private UUID clubId;
 	
 	public Team () {
 		
 	}
 
-	public Team(String name, String category, String type, UUID club_id) {
+	public Team(String name, String category, String type, UUID clubId) {
 		this.name = name;
 		this.category = category;
 		this.type = type;
-		this.club_id = club_id;
+		this.clubId = clubId;
 	}
 	
 	public Team(TeamCreationDTO team) {
 		this.name = team.getName();
 		this.category = team.getCategory();
 		this.type = team.getType();
-		this.club_id = team.getClub_id();
+		this.clubId = team.getClubId();
 	}
 
 	public String getName() {
@@ -69,12 +69,12 @@ public class Team {
 		this.type = type;
 	}
 
-	public UUID getClub_id() {
-		return club_id;
+	public UUID getClubId() {
+		return clubId;
 	}
 
-	public void setClub_id(UUID club_id) {
-		this.club_id = club_id;
+	public void setClubId(UUID clubId) {
+		this.clubId = clubId;
 	}
 
 	public UUID getId() {

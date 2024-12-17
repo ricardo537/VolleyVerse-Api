@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ import com.tfg.volleyverse.model.Team;
 public interface TeamRepository extends JpaRepository<Team, UUID> {
 	
 	Team save(Team team);
+	
+	List<Team> findByClubId(UUID clubId);
 	
 }

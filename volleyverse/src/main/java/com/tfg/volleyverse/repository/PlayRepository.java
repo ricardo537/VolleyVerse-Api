@@ -16,4 +16,6 @@ public interface PlayRepository extends JpaRepository<Play, PlayId>{
 	
 	List<Play> findByTeamId (UUID teamId);
 	
+	List<Play> findByPlayerId (UUID playerId);
+	
 }

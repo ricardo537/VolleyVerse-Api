@@ -17,7 +17,9 @@ import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
+import com.tfg.volleyverse.dto.TeamDTO;
 import com.tfg.volleyverse.model.Play;
+import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.service.imp.PlayServiceImp;
 import com.tfg.volleyverse.service.imp.TeamServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
@@ -70,5 +72,18 @@ public class TeamController {
 			return new ResponseEntity<List<PlayerResumeDTO>>(players, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<PlayerResumeDTO>>(List.of(), HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/getTeams")
+	public ResponseEntity<List<TeamDTO>> getTeams (@RequestBody LoginDTO login) {
+		LoginDTO user = this.userService.login(login);
+		if (user != null) {
+			List<TeamDTO> success = this.teamService.getTeams(login);
+			if (success.isEmpty()) {
+				return new ResponseEntity<List<TeamDTO>>(success, HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<List<TeamDTO>>(success, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<TeamDTO>>(List.of(), HttpStatus.NOT_FOUND);
 	}
 }

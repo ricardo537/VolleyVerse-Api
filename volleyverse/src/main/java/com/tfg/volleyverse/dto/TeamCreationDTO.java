@@ -9,18 +9,18 @@ public class TeamCreationDTO {
 	private String name;
 	private String category;
 	private String type;
-	private UUID club_id;
+	private UUID clubId;
 	private LoginDTO login;
 	
 	public TeamCreationDTO () {
 		
 	}
 
-	public TeamCreationDTO(String name, String category, String type, UUID club_id, LoginDTO login) {
+	public TeamCreationDTO(String name, String category, String type, UUID clubId, LoginDTO login) {
 		this.name = name;
 		this.category = category;
 		this.type = type;
-		this.club_id = club_id;
+		this.clubId = clubId;
 		this.login = login;
 	}
 
@@ -48,12 +48,12 @@ public class TeamCreationDTO {
 		this.type = type;
 	}
 
-	public UUID getClub_id() {
-		return club_id;
+	public UUID getClubId() {
+		return clubId;
 	}
 
-	public void setClub_id(UUID club_id) {
-		this.club_id = club_id;
+	public void setClubId(UUID clubId) {
+		this.clubId = clubId;
 	}
 
 	public LoginDTO getLogin() {
