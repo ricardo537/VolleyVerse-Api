@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
+import com.tfg.volleyverse.dto.LeaveTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
@@ -85,5 +86,17 @@ public class TeamController {
 			return new ResponseEntity<List<TeamDTO>>(success, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<TeamDTO>>(List.of(), HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/leave")
+	public ResponseEntity<Boolean> deleteTeam (@RequestBody LeaveTeamDTO data) {
+		LoginDTO login = this.userService.login(data.getLogin());
+		if (login != null) {
+			Boolean success = this.teamService.leaveTeam(data);
+			if (success) {
+				return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+			} 
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
 	}
 }

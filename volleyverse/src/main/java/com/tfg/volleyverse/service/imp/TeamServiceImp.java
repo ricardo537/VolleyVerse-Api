@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.LeaveTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.dto.TeamDTO;
 import com.tfg.volleyverse.model.Play;
+import com.tfg.volleyverse.model.PlayId;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.model.User;
@@ -111,6 +113,24 @@ public class TeamServiceImp implements TeamService {
 	private TeamDTO collectClubTeamData(Team team) {
 		List<PlayerResumeDTO> players = getMembersOfTeam(team.getId());
 		return new TeamDTO(team, players);
+	}
+
+	@Override
+	public boolean leaveTeam(LeaveTeamDTO data) {
+		Team team = this.teamRepository.getById(data.getTeamId());
+		User user = this.userRepository.findByEmailAndPassword(data.getLogin().getEmail(), data.getLogin().getPassword());
+		if (team != null && user != null) {
+			Optional<Play> success = this.playRepository.findById(new PlayId(data.getTeamId(), user.getIde()));
+			if (success.isPresent()) {
+				List<Play> plays = this.playRepository.findByTeamId(data.getTeamId());
+				if (plays.size() == 1) {
+					this.teamRepository.delete(team);
+				}
+				this.playRepository.delete(success.get());
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
