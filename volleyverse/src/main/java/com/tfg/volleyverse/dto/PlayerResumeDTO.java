@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.tfg.volleyverse.model.Player;
 
 public class PlayerResumeDTO {
+	
 	private UUID id;
 	private String name;
 	private String last_name;

@@ -1,14 +1,22 @@
 package com.tfg.volleyverse.service.imp;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
+import com.tfg.volleyverse.model.Play;
+import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.model.User;
+import com.tfg.volleyverse.repository.PlayRepository;
+import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.TeamRepository;
 import com.tfg.volleyverse.repository.UserRepository;
 import com.tfg.volleyverse.service.TeamService;
@@ -20,6 +28,10 @@ public class TeamServiceImp implements TeamService {
 	private TeamRepository teamRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private PlayRepository playRepository;
+	@Autowired
+	private PlayerRepository playerRepository;
 	
 	@Override
 	public UUID createTeam(TeamCreationDTO team) {
@@ -40,6 +52,28 @@ public class TeamServiceImp implements TeamService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<PlayerResumeDTO> getMembersOfTeam(UUID teamId) {
+		Optional<Team> team = this.teamRepository.findById(teamId);
+		if (team.isPresent()) {
+			List<Play> plays = this.playRepository.findByTeamId(teamId);
+			List<PlayerResumeDTO> players = plays.stream()
+					.map(play -> this.playerRepository.findById(play.getPlayerId()))
+					.filter(Optional::isPresent)
+					.map(optional -> optional.get())
+					.map(player -> {
+						PlayerResumeDTO result = new PlayerResumeDTO(player);
+						User user = this.userRepository.findByIde(player.getId());
+						if (user != null) {
+							result.setImg(user.getImg());
+						}
+						return result;
+					}).collect(Collectors.toList());
+			return players;
+		}
+		return List.of();
 	}
 
 }
