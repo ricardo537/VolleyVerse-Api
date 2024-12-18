@@ -14,13 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
+import com.tfg.volleyverse.dto.InvitationAcceptDTO;
+import com.tfg.volleyverse.dto.InvitationDTO;
+import com.tfg.volleyverse.dto.InvitationSendDTO;
 import com.tfg.volleyverse.dto.LeaveTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.dto.TeamDTO;
+import com.tfg.volleyverse.model.Invitation;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.User;
+import com.tfg.volleyverse.service.imp.InvitationServiceImp;
 import com.tfg.volleyverse.service.imp.PlayServiceImp;
 import com.tfg.volleyverse.service.imp.TeamServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
@@ -35,6 +40,8 @@ public class TeamController {
 	private UserServiceImp userService;
 	@Autowired
 	private PlayServiceImp playService;
+	@Autowired
+	private InvitationServiceImp invitationService;
 	
 	@PostMapping("/create")
 	public ResponseEntity<String> createTeam(@RequestBody TeamCreationDTO team) {
@@ -98,5 +105,46 @@ public class TeamController {
 			} 
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/invite")
+	public ResponseEntity<Boolean> invitePlayer (@RequestBody InvitationSendDTO invitation) {
+		LoginDTO login = this.userService.login(invitation.getLogin());
+		if (login != null) {
+			Boolean success = this.invitationService.sendInvitation(invitation);
+			if (success) {
+				return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Boolean>(success, HttpStatus.NOT_ACCEPTABLE);
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/acceptInvitation")
+	public ResponseEntity<Boolean> acceptInvitation(@RequestBody InvitationAcceptDTO invitation) {
+		LoginDTO login = this.userService.login(invitation.getLogin());
+		if (login != null) {
+			Invitation invit = this.invitationService.acceptInvitation(invitation);
+			if (invit != null) {
+				Boolean success = this.playService.addPlayer(new Play(invit.getTeamId(), invit.getUserId()));
+				if (success) {
+					return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<Boolean>(success, HttpStatus.NOT_ACCEPTABLE);
+				}
+			} 
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/getInvitations")
+	public ResponseEntity<List<InvitationDTO>> getInvitations (@RequestBody LoginDTO login) {
+		LoginDTO log = this.userService.login(login);
+		if(log != null) {
+			List<InvitationDTO> invitations = this.invitationService.getInvitations(login);
+			return new ResponseEntity<List<InvitationDTO>>(invitations, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<InvitationDTO>>(List.of(), HttpStatus.NOT_FOUND);
 	}
 }

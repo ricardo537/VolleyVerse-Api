@@ -2,6 +2,9 @@ package com.tfg.volleyverse.model;
 
 import java.util.UUID;
 
+import com.tfg.volleyverse.dto.InvitationDTO;
+import com.tfg.volleyverse.dto.InvitationSendDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +20,7 @@ public class Invitation {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	@Column(nullable = false)
-	private String date;
-	@Column(nullable = false)
-	private String host;
+	private UUID host;
 	@Column(nullable = false)
 	private UUID userId;
 	@Column(nullable = false)
@@ -31,27 +32,24 @@ public class Invitation {
 		
 	}
 
-	public Invitation(String date, String host, UUID userId, UUID teamId, Boolean state) {
-		this.date = date;
+	public Invitation(UUID host, UUID userId, UUID teamId, Boolean state) {
 		this.host = host;
 		this.userId = userId;
 		this.teamId = teamId;
 		this.state = state;
 	}
-
-	public String getDate() {
-		return date;
+	
+	public Invitation(InvitationSendDTO invitation, UUID host) {
+		this.host = host;
+		this.userId = invitation.getUserId();
+		this.teamId = invitation.getTeamId();
 	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String getHost() {
+	public UUID getHost() {
 		return host;
 	}
 
-	public void setHost(String host) {
+	public void setHost(UUID host) {
 		this.host = host;
 	}
 
