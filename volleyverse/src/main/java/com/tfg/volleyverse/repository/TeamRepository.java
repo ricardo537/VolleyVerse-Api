@@ -15,4 +15,6 @@ public interface TeamRepository extends JpaRepository<Team, UUID> {
 	
 	List<Team> findByClubId(UUID clubId);
 	
+	Team findByIdAndClubId(UUID id, UUID clubId);
+	
 }

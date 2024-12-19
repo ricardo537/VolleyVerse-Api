@@ -9,25 +9,28 @@ public class InvitationDTO {
 	private String host;
 	private UUID userId;
 	private UUID teamId;
+	private String teamName;
 	private Boolean state;
 	
 	public InvitationDTO () {
 		
 	}
 
-	public InvitationDTO(UUID id, String host, UUID userId, UUID teamId, Boolean state) {
+	public InvitationDTO(UUID id, String host, UUID userId, UUID teamId, String teamName, Boolean state) {
 		this.id = id;
 		this.host = host;
 		this.userId = userId;
 		this.teamId = teamId;
+		this.teamName = teamName;
 		this.state = state;
 	}
 
-	public InvitationDTO(Invitation invitation, String host) {
+	public InvitationDTO(Invitation invitation, String host, String teamName) {
 		this.id = invitation.getId();
 		this.host = host;
 		this.userId = invitation.getUserId();
 		this.teamId = invitation.getTeamId();
+		this.teamName = teamName;
 		this.state = invitation.getState();
 	}
 
@@ -71,5 +74,14 @@ public class InvitationDTO {
 		this.state = state;
 	}
 
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+
+	
 	
 }
