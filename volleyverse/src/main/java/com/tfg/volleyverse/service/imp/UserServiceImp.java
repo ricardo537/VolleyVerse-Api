@@ -99,5 +99,9 @@ public class UserServiceImp implements UserService {
 		}
 		return false;
 	}
+	
+	public User findUser(LoginDTO login) {
+		return this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+	}
 
 }
