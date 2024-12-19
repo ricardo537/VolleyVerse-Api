@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 public class TeamCreationDTO {
 	
 	private String name;
+	private String gender;
 	private String category;
 	private String type;
 	private UUID clubId;
@@ -16,13 +17,16 @@ public class TeamCreationDTO {
 		
 	}
 
-	public TeamCreationDTO(String name, String category, String type, UUID clubId, LoginDTO login) {
+	public TeamCreationDTO(String name, String gender, String category, String type, UUID clubId, LoginDTO login) {
 		this.name = name;
+		this.gender = gender;
 		this.category = category;
 		this.type = type;
 		this.clubId = clubId;
 		this.login = login;
 	}
+
+
 
 	public String getName() {
 		return name;
@@ -62,6 +66,14 @@ public class TeamCreationDTO {
 
 	public void setLogin(LoginDTO login) {
 		this.login = login;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 }

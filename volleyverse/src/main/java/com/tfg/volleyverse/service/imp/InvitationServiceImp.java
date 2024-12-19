@@ -46,7 +46,17 @@ public class InvitationServiceImp implements InvitationService {
 	@Override
 	public boolean sendInvitation(InvitationSendDTO invitation) {
 		User user = this.userRepository.findByEmail(invitation.getLogin().getEmail());
-		Optional<Team> team = this.teamRepository.findById(invitation.getTeamId());
+		Optional<Team> team = Optional.empty();
+		if (user.getType().equals("club")) {
+			team =  this.teamRepository.findByIdAndClubId(invitation.getTeamId(), user.getIde());
+		} else {
+			if (user.getType().equals("player")) {
+				Optional<Play> play = this.playRepository.findById(new PlayId(invitation.getTeamId(), user.getIde()));
+				if (play.isPresent()) {
+					team =  this.teamRepository.findById(invitation.getTeamId());
+				}
+			}
+		}
 		if (user != null && team.isPresent()) {
 			Invitation invitationExists = this.invitationRepository.findByUserIdAndTeamId(invitation.getUserId(), invitation.getTeamId());
 			Optional<Play> play = this.playRepository.findById(new PlayId(invitation.getTeamId(), invitation.getUserId()));

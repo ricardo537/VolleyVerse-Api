@@ -23,6 +23,8 @@ public class Team {
 	@Column(nullable = false)
 	private String category;
 	@Column(nullable = false)
+	private String gender;
+	@Column(nullable = false)
 	private String type;
 	@Column(nullable = true)
 	private UUID clubId;
@@ -30,19 +32,29 @@ public class Team {
 	public Team () {
 		
 	}
-
-	public Team(String name, String category, String type, UUID clubId) {
+	
+	public Team(String name, String category, String gender, String type, UUID clubId) {
 		this.name = name;
 		this.category = category;
+		this.gender = gender;
 		this.type = type;
 		this.clubId = clubId;
 	}
-	
+
 	public Team(TeamCreationDTO team) {
 		this.name = team.getName();
+		this.gender = team.getGender();
 		this.category = team.getCategory();
 		this.type = team.getType();
 		this.clubId = team.getClubId();
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getName() {
