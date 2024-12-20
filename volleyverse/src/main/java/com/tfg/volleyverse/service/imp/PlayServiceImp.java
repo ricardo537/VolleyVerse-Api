@@ -13,6 +13,7 @@ import com.tfg.volleyverse.model.PlayId;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.repository.PlayRepository;
+import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.TeamRepository;
 import com.tfg.volleyverse.service.PlayService;
 
@@ -23,11 +24,14 @@ public class PlayServiceImp implements PlayService {
 	private PlayRepository playRepository;
 	@Autowired
 	private TeamRepository teamRepository;
+	@Autowired
+	private PlayerRepository playerRepository;
 
 	@Override
 	public boolean addPlayer(Play play) {
 		Optional<Play> playExists = this.playRepository.findById(new PlayId(play));
-		if (playExists.isEmpty()) {
+		Optional<Player> player = this.playerRepository.findById(play.getPlayerId());
+		if (playExists.isEmpty() && player.isPresent()) {
 			Team team = this.teamRepository.getById(play.getTeamId());
 			if (team != null) {
 				List<Play> members = this.playRepository.findByTeamId(team.getId());

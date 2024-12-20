@@ -16,4 +16,6 @@ public interface InvitationRepository extends JpaRepository<Invitation, UUID> {
 	List<Invitation> findByUserId (UUID userId);
 	
 	Invitation findByUserIdAndTeamId(UUID userId, UUID teamId);
+	
+	List<Invitation> findByTeamId(UUID teamId);
 }
