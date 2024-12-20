@@ -13,11 +13,13 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.dto.TeamDTO;
+import com.tfg.volleyverse.model.Invitation;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.PlayId;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.model.User;
+import com.tfg.volleyverse.repository.InvitationRepository;
 import com.tfg.volleyverse.repository.PlayRepository;
 import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.TeamRepository;
@@ -35,6 +37,8 @@ public class TeamServiceImp implements TeamService {
 	private PlayRepository playRepository;
 	@Autowired
 	private PlayerRepository playerRepository;
+	@Autowired
+	private InvitationRepository invitationRepository;
 	
 	@Override
 	public UUID createTeam(TeamCreationDTO team) {
@@ -124,6 +128,10 @@ public class TeamServiceImp implements TeamService {
 			if (success.isPresent()) {
 				List<Play> plays = this.playRepository.findByTeamId(data.getTeamId());
 				if (plays.size() == 1) {
+					List<Invitation> invitations = this.invitationRepository.findByTeamId(team.getId());
+					invitations.forEach(invitation -> {
+						this.invitationRepository.delete(invitation);
+					});
 					this.teamRepository.delete(team);
 				}
 				this.playRepository.delete(success.get());

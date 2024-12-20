@@ -70,6 +70,23 @@ public class UserServiceImp implements UserService {
 				break;
 			}
 			default : {
+				List<Play> plays = this.playRepository.findByPlayerId(user.getIde());
+				plays.stream().forEach(play -> {
+					this.playRepository.delete(play);
+					Optional<Team> team = this.teamRepository.findById(play.getTeamId());
+					if (team.isPresent()) {
+						List<Play> otherPlays = this.playRepository.findByTeamId(play.getTeamId());
+						if (otherPlays.size() == 0) {
+							this.deleteInvitationsOfTeam(team.get());
+							this.deletePlaysOfTeam(team.get());
+							this.teamRepository.delete(team.get());
+						}
+					}
+					Optional<Player> player = this.playerRepository.findById(user.getIde());
+					if (player.isPresent()) {
+						this.deleteInvitationsOfPlayer(player.get());
+					}
+				});
 				Optional<Player> player = this.playerRepository.findById(user.getIde());
 				if (player.isEmpty()) {
 					return false;
@@ -135,6 +152,13 @@ public class UserServiceImp implements UserService {
 		List<Play> plays = this.playRepository.findByTeamId(team.getId());
 		plays.stream().forEach(play -> {
 			this.playRepository.delete(play);
+		});
+	}
+	
+	private void deleteInvitationsOfPlayer(Player player) {
+		List<Invitation> invitations = this.invitationRepository.findByUserId(player.getId());
+		invitations.stream().forEach(invitation -> {
+			this.invitationRepository.delete(invitation);
 		});
 	}
 
