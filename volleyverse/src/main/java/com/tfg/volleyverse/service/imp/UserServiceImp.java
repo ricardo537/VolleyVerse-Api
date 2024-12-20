@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.service.imp;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,16 @@ import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerDTO;
 import com.tfg.volleyverse.model.Club;
+import com.tfg.volleyverse.model.Invitation;
+import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.Player;
+import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.ClubRepository;
+import com.tfg.volleyverse.repository.InvitationRepository;
+import com.tfg.volleyverse.repository.PlayRepository;
 import com.tfg.volleyverse.repository.PlayerRepository;
+import com.tfg.volleyverse.repository.TeamRepository;
 import com.tfg.volleyverse.repository.UserRepository;
 import com.tfg.volleyverse.service.UserService;
 
@@ -25,6 +32,12 @@ public class UserServiceImp implements UserService {
 	private PlayerRepository playerRepository;
 	@Autowired
 	private ClubRepository clubRepository;
+	@Autowired
+	private TeamRepository teamRepository;
+	@Autowired
+	private PlayRepository playRepository;
+	@Autowired
+	private InvitationRepository invitationRepository;
 
 	@Override
 	public LoginDTO login(LoginDTO login) {
@@ -42,6 +55,13 @@ public class UserServiceImp implements UserService {
 			//Cuando pongo otro case "player" no funciona hay que revisarlo
 			switch(login.getType()) {
 			case ("club") : {
+				List<Team> teams = this.teamRepository.findByClubId(user.getIde());
+				teams.stream()
+				.forEach(team -> {
+					this.deleteInvitationsOfTeam(team);
+					this.deletePlaysOfTeam(team);
+					this.teamRepository.delete(team);
+				});
 				Optional<Club> club = this.clubRepository.findById(user.getIde());
 				if (club.isEmpty()) {
 					return false;
@@ -102,6 +122,20 @@ public class UserServiceImp implements UserService {
 	
 	public User findUser(LoginDTO login) {
 		return this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+	}
+	
+	private void deleteInvitationsOfTeam(Team team) {
+		List<Invitation> invitations = this.invitationRepository.findByTeamId(team.getId());
+		invitations.stream().forEach(invitation -> {
+			this.invitationRepository.delete(invitation);
+		});
+	}
+	
+	private void deletePlaysOfTeam(Team team) {
+		List<Play> plays = this.playRepository.findByTeamId(team.getId());
+		plays.stream().forEach(play -> {
+			this.playRepository.delete(play);
+		});
 	}
 
 }
