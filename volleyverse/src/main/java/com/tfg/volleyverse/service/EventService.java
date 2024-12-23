@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.model.Event;
 
 public interface EventService {
@@ -12,6 +13,9 @@ public interface EventService {
 	
 	boolean deleteEvent (UUID id_event);
 	
-	List<Event> getAll ();
+	List<Event> getEventsToSetResults ();
 	
+	List<Event> getEventsToParticipate (String category, String type, String gender);
+	
+	List<Event> getMyEvents (LoginDTO login);
 }

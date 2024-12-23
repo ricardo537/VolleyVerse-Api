@@ -33,21 +33,4 @@ public class EventController {
 		return new ResponseEntity<Boolean>(success, HttpStatus.BAD_REQUEST);
 	}
 	
-	@PostMapping("/delete")
-	public ResponseEntity<Boolean> deleteEvent (@RequestBody UUID id_event) {
-		Boolean success = this.eventService.deleteEvent(id_event);
-		if (success) {
-			return new ResponseEntity<Boolean>(success, HttpStatus.OK);
-		}
-		return new ResponseEntity<Boolean>(success, HttpStatus.BAD_REQUEST);
-	}
-	
-	@GetMapping("/getAll") 
-	public ResponseEntity<List<Event>> getEventsForPlayers () {
-		List<Event> success = this.eventService.getAll();
-		if (success.isEmpty()) {
-			return new ResponseEntity<List<Event>>(success, HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<List<Event>>(success, HttpStatus.OK);
-	}
 }

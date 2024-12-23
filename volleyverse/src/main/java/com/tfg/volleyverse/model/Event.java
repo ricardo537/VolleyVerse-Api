@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.EventRegisterDTO;
@@ -26,76 +27,79 @@ public class Event {
 	private String description;
 	
 	@Column(nullable = false)
-	private String place;
+	private String address;
 	
 	@Column(nullable = false)
-	private String start_date;
+	private LocalDateTime startDate;
 	
 	@Column(nullable = false)
-	private String end_date;
+	private LocalDateTime endDate;
 	
 	@Column(nullable = false)
 	private String type;
 	
 	@Column(nullable = false)
-	private Integer min_participants;
+	private Integer minParticipants;
 	
 	@Column(nullable = false)
-	private Integer max_participants;
+	private Integer maxParticipants;
 	
 	@Column(nullable = false)
-	private String creator_email;
+	private UUID creatorId;
 	
 	@Column(nullable = false)
 	private Double price;
 	
 	@Column(nullable = true)
-	private String court_img;
+	private String category;
 	
 	@Column(nullable = false)
-	private String type_of_public;
+	private String gender;
+	
+	@Column(nullable = false)
+	private String typeParticipant;
+	
+	@Column(nullable = false)
+	private Boolean results;
 	
 	public Event() {
 		
 	}
-	
-	public Event(String name, String description, String place, String start_date, String end_date, String type,
-			Integer min_participants, Integer max_participants, String creator_email, Double price, String court_img, String type_of_public) {
-		this.type_of_public = type_of_public;
+
+	public Event(String name, String description, String address, LocalDateTime startDate, LocalDateTime endDate,
+			String type, Integer minParticipants, Integer maxParticipants, UUID creatorId, Double price,
+			String category, String gender, String typeParticipant, Boolean results) {
 		this.name = name;
 		this.description = description;
-		this.place = place;
-		this.start_date = start_date;
-		this.end_date = end_date;
+		this.address = address;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.type = type;
-		this.min_participants = min_participants;
-		this.max_participants = max_participants;
-		this.creator_email = creator_email;
+		this.minParticipants = minParticipants;
+		this.maxParticipants = maxParticipants;
+		this.creatorId = creatorId;
 		this.price = price;
-		this.court_img = court_img;
+		this.category = category;
+		this.gender = gender;
+		this.typeParticipant = typeParticipant;
+		this.results = results;
 	}
-
-	public Event(EventRegisterDTO event) {
-		this.type_of_public = event.getType_of_public();
-		this.place = event.getPlace();
+	
+	public Event (EventRegisterDTO event, UUID creatorId) {
 		this.name = event.getName();
 		this.description = event.getDescription();
-		this.start_date = event.getStart_date();
-		this.end_date = event.getEnd_date();
+		this.address = event.getAddress();
+		this.startDate = event.getStartDate();
+		this.endDate = event.getEndDate();
 		this.type = event.getType();
-		this.min_participants = event.getMin_participants();
-		this.max_participants = event.getMax_participants();
-		this.creator_email = event.getCreator_email();
+		this.minParticipants = event.getMinParticipants();
+		this.maxParticipants = event.getMaxParticipants();
+		this.creatorId = creatorId;
 		this.price = event.getPrice();
-		this.court_img = event.getCourt_img();
-	}
-
-	public String getType_of_public() {
-		return type_of_public;
-	}
-
-	public void setType_of_public(String type_of_public) {
-		this.type_of_public = type_of_public;
+		this.category = event.getCategory();
+		this.gender = event.getGender();
+		this.typeParticipant = event.getTypeParticipant();
+		this.results = event.getResults();
 	}
 
 	public String getName() {
@@ -114,28 +118,28 @@ public class Event {
 		this.description = description;
 	}
 
-	public String getPlace() {
-		return place;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setPlace(String place) {
-		this.place = place;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public String getStart_date() {
-		return start_date;
+	public LocalDateTime getStartDate() {
+		return startDate;
 	}
 
-	public void setStart_date(String start_date) {
-		this.start_date = start_date;
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
 	}
 
-	public String getEnd_date() {
-		return end_date;
+	public LocalDateTime getEndDate() {
+		return endDate;
 	}
 
-	public void setEnd_date(String end_date) {
-		this.end_date = end_date;
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getType() {
@@ -146,28 +150,28 @@ public class Event {
 		this.type = type;
 	}
 
-	public Integer getMin_participants() {
-		return min_participants;
+	public Integer getMinParticipants() {
+		return minParticipants;
 	}
 
-	public void setMin_participants(Integer min_participants) {
-		this.min_participants = min_participants;
+	public void setMinParticipants(Integer minParticipants) {
+		this.minParticipants = minParticipants;
 	}
 
-	public Integer getMax_participants() {
-		return max_participants;
+	public Integer getMaxParticipants() {
+		return maxParticipants;
 	}
 
-	public void setMax_participants(Integer max_participants) {
-		this.max_participants = max_participants;
+	public void setMaxParticipants(Integer maxParticipants) {
+		this.maxParticipants = maxParticipants;
 	}
 
-	public String getCreator_email() {
-		return creator_email;
+	public UUID getCreatorId() {
+		return creatorId;
 	}
 
-	public void setCreator_email(String creator_email) {
-		this.creator_email = creator_email;
+	public void setCreatorId(UUID creatorId) {
+		this.creatorId = creatorId;
 	}
 
 	public Double getPrice() {
@@ -178,12 +182,36 @@ public class Event {
 		this.price = price;
 	}
 
-	public String getCourt_img() {
-		return court_img;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setCourt_img(String court_img) {
-		this.court_img = court_img;
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getTypeParticipant() {
+		return typeParticipant;
+	}
+
+	public void setTypeParticipant(String typeParticipant) {
+		this.typeParticipant = typeParticipant;
+	}
+
+	public Boolean getResults() {
+		return results;
+	}
+
+	public void setResults(Boolean results) {
+		this.results = results;
 	}
 
 	public UUID getId() {
