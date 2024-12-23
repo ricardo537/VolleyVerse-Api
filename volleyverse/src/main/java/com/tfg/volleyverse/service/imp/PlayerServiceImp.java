@@ -1,6 +1,9 @@
 package com.tfg.volleyverse.service.imp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import com.tfg.volleyverse.dto.RegisterPlayerDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
 import com.tfg.volleyverse.dto.UpdatePlayerDTO;
 import com.tfg.volleyverse.dto.PlayerDTO;
+import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.PlayerRepository;
@@ -52,7 +56,7 @@ public class PlayerServiceImp implements PlayerService {
 					if (update.getPassword() != null && !update.getPassword().equals("")) {
 						user.setPassword(update.getPassword());
 					}
-					Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
+					Optional<Player> playerOp = this.playerRepository.findById(user.getIde());
 					if (playerOp.isPresent()) {
 						user = this.userRepository.save(user);
 						Player player = playerOp.get();
@@ -65,7 +69,7 @@ public class PlayerServiceImp implements PlayerService {
 				if (update.getPassword() != null && !update.getPassword().equals("")) {
 					user.setPassword(update.getPassword());
 				}
-				Optional<Player> playerOp = this.playerRepository.findById(user.getId_user());
+				Optional<Player> playerOp = this.playerRepository.findById(user.getIde());
 				if (playerOp.isPresent()) {
 					user = this.userRepository.save(user);
 					Player player = playerOp.get();
@@ -79,6 +83,46 @@ public class PlayerServiceImp implements PlayerService {
 		return null;
 	}
 
+	@Override
+	public List<PlayerResumeDTO> searchPlayers(String nameTotal) {
+		try {
+			String[] name = splitName(nameTotal);
+			List<Player> players = this.playerRepository.findByNameStartingWithAndLastNameStartingWith(name[0], name[1]);
+			List<PlayerResumeDTO> playersResumeWithoutImg = players.stream()
+					.map(PlayerResumeDTO::new)
+					.collect(Collectors.toList());
+			List<PlayerResumeDTO> playersResumeResult = playersResumeWithoutImg.stream()
+					.map(player -> {
+						User user = this.userRepository.findByIde(player.getId());
+						if (user != null) {
+							player.setImg(user.getImg());
+						} else {
+							player.setImg("");
+						}
+						return player;
+					}).collect(Collectors.toList());
+			return playersResumeResult;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return new ArrayList<PlayerResumeDTO>();
+		}
+	}
+	
+	private String[] splitName (String nameTotal) {
+		if (nameTotal == null || nameTotal.equals("")) {
+			throw new RuntimeException("No se puede enviar el nombre nulo o vacío");
+		}
+		
+		String[] parts = nameTotal.trim().split(" ");
+		
+		if (parts.length == 1) {
+			return new String[] {parts[0], ""};
+		}
+		
+		String lastName = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length));
+		
+		return new String[] {parts[0], lastName};
+	}
 	
 
 }

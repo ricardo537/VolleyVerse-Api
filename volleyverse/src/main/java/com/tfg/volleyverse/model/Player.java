@@ -23,7 +23,7 @@ public class Player {
 	private String name;
 	
 	@Column(nullable = false)
-	private String last_name;
+	private String lastName;
 	
 	@Column(nullable = true)
 	private String description;
@@ -35,16 +35,16 @@ public class Player {
 		
 	}
 	
-	public Player (String name, String last_name, String description, double level) {
+	public Player (String name, String lastName, String description, double level) {
 		this.name = name;
-		this.last_name = last_name;
+		this.lastName = lastName;
 		this.description = description;
 		this.level = level;
 	}
 	
 	public Player (RegisterPlayerDTO register) {
 		this.name = register.getName();
-		this.last_name = register.getLast_name();
+		this.lastName = register.getLast_name();
 		this.description = "";
 		this.level = 0;
 	}
@@ -54,13 +54,13 @@ public class Player {
 			this.name = update.getName();
 		}
 		if (update.getLast_name() != null && !update.getLast_name().equals("")) {
-			this.last_name = update.getLast_name();
+			this.lastName = update.getLast_name();
 		}
 		if (update.getDescription() != null) {
 			this.description = update.getDescription();
 		}
 	}
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -73,12 +73,12 @@ public class Player {
 		this.name = name;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getDescription() {
