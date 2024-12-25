@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sun.net.httpserver.Authenticator.Success;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.service.imp.EventServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
@@ -40,6 +41,32 @@ public class EventController {
 			return new ResponseEntity<Boolean>(success, HttpStatus.BAD_REQUEST);
 		} 
 		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/getMyEventsToRun")
+	public ResponseEntity<List<MyEventDTO>> getMyEventsToRun (@RequestBody LoginDTO login) {
+		LoginDTO loginExists = this.userService.login(login);
+		if (loginExists != null) {
+			List<MyEventDTO> myEvents = this.eventService.getMyEventsToRun(login);
+			if (!myEvents.isEmpty()) {
+				return new ResponseEntity<List<MyEventDTO>>(myEvents, HttpStatus.OK);
+			}
+			return new ResponseEntity<List<MyEventDTO>>(myEvents, HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<MyEventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/getMyCompletedEvents")
+	public ResponseEntity<List<MyEventDTO>> getMyCompletedEvents (@RequestBody LoginDTO login) {
+		LoginDTO loginExists = this.userService.login(login);
+		if (loginExists != null) {
+			List<MyEventDTO> myEvents = this.eventService.getMyCompletedEvents(login);
+			if (!myEvents.isEmpty()) {
+				return new ResponseEntity<List<MyEventDTO>>(myEvents, HttpStatus.OK);
+			}
+			return new ResponseEntity<List<MyEventDTO>>(myEvents, HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<MyEventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 	
 }

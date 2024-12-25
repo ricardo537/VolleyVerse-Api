@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.EventRepository;
@@ -62,9 +64,35 @@ public class EventServiceImp implements EventService {
 	}
 
 	@Override
-	public List<Event> getMyEvents(LoginDTO login) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MyEventDTO> getMyEventsToRun(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			List<Event> myEvents = this.eventRepository.findByCreatorId(user.getIde());
+			LocalDateTime now = LocalDateTime.now();
+			List<MyEventDTO> result = myEvents.stream()
+					.filter((e) -> e.getStartDate().isAfter(now))
+					.map((event) -> {
+						return new MyEventDTO(event);
+					}).collect(Collectors.toList());
+			return result;
+		}
+		return List.of();
+	}
+
+	@Override
+	public List<MyEventDTO> getMyCompletedEvents(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			List<Event> myEvents = this.eventRepository.findByCreatorId(user.getIde());
+			LocalDateTime now = LocalDateTime.now();
+			List<MyEventDTO> result = myEvents.stream()
+					.filter((e) -> e.getStartDate().isBefore(now))
+					.map((event) -> {
+						return new MyEventDTO(event);
+					}).collect(Collectors.toList());
+			return result;
+		}
+		return List.of();
 	}
 	
 }
