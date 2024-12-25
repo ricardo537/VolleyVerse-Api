@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.DeleteEventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
@@ -42,12 +43,15 @@ public class EventServiceImp implements EventService {
 	}
 
 	@Override
-	public boolean deleteEvent(UUID id_event) {
+	public boolean deleteEvent(DeleteEventDTO event) {
 		//Falta borrar las trazas
-		Optional<Event> event = this.eventRepository.findById(id_event);
-		if (event.isPresent()) {
-			this.eventRepository.delete(event.get());
-			return true;
+		User user = this.userRepository.findByEmailAndPassword(event.getLogin().getEmail(), event.getLogin().getPassword());
+		if (user != null) {
+			Optional<Event> eventExists = this.eventRepository.findById(event.getId());
+			if (eventExists.isPresent() && eventExists.get().getCreatorId().toString().equals(user.getIde().toString())) {
+				this.eventRepository.delete(eventExists.get());
+				return true;
+			}
 		}
 		return false;
 	}

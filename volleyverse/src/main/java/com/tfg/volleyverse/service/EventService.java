@@ -3,6 +3,7 @@ package com.tfg.volleyverse.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.tfg.volleyverse.dto.DeleteEventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
@@ -12,7 +13,7 @@ public interface EventService {
 	
 	boolean addEvent (EventRegisterDTO event);
 	
-	boolean deleteEvent (UUID id_event);
+	boolean deleteEvent (DeleteEventDTO event);
 	
 	List<Event> getEventsToSetResults ();
 	
