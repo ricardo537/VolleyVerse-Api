@@ -27,14 +27,11 @@ public class EventServiceImp implements EventService {
 	@Override
 	public boolean addEvent(EventRegisterDTO eventDTO) {
 		LocalDateTime now = LocalDateTime.now();
-		if (eventDTO.getStartDate().isAfter(now)) {
-			System.out.println("Entró las fechas parece ser correctas");
+		if (eventDTO.getStartDate().isAfter(now) && eventDTO.getEndDate().isAfter(eventDTO.getStartDate())) {
 			User user = this.userRepository.findByEmailAndPassword(eventDTO.getLogin().getEmail(), eventDTO.getLogin().getPassword());
 			if (user != null) {
-				System.out.println("Se encontró un usuario");
 				Event event = this.eventRepository.save(new Event(eventDTO, user.getIde()));
 				if (event != null) {
-					System.out.println("No se creo el evento");
 					return true;
 				}
 			}

@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.net.httpserver.Authenticator.Success;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.service.imp.EventServiceImp;
+import com.tfg.volleyverse.service.imp.UserServiceImp;
 
 @RestController
 @RequestMapping("/volleyverse/api/v1/events")
@@ -23,14 +26,20 @@ public class EventController {
 	
 	@Autowired
 	private EventServiceImp eventService;
+	@Autowired
+	private UserServiceImp userService;
 	
 	@PostMapping("/add")
 	public ResponseEntity<Boolean> addEvent (@RequestBody EventRegisterDTO event) {
-		Boolean success = this.eventService.addEvent(event);
-		if (success) {
-			return new ResponseEntity<Boolean>(success, HttpStatus.OK);
-		}
-		return new ResponseEntity<Boolean>(success, HttpStatus.BAD_REQUEST);
+		LoginDTO login = this.userService.login(event.getLogin());
+		if (login != null) {
+			Boolean success = this.eventService.addEvent(event);
+			if (success) {
+				return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+			}
+			return new ResponseEntity<Boolean>(success, HttpStatus.BAD_REQUEST);
+		} 
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
 	}
 	
 }
