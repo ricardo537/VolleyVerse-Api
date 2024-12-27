@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.DeleteEventDTO;
+import com.tfg.volleyverse.dto.EventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Event;
@@ -22,4 +24,6 @@ public interface EventService {
 	List<MyEventDTO> getMyEventsToRun (LoginDTO login);
 	
 	List<MyEventDTO> getMyCompletedEvents (LoginDTO login);
+	
+	List<EventDTO> getFilteredEvents (FilterEventDTO filter, int page, int size);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sun.net.httpserver.Authenticator.Success;
 import com.tfg.volleyverse.dto.DeleteEventDTO;
+import com.tfg.volleyverse.dto.EventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Event;
@@ -82,6 +86,15 @@ public class EventController {
 			return new ResponseEntity<Boolean>(success, HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/getEventsFiltered")
+	public ResponseEntity<List<EventDTO>> getFilteredEvents (@RequestBody FilterEventDTO filter, @RequestParam int page, @RequestParam int size) {
+		List<EventDTO> events = this.eventService.getFilteredEvents(filter, page, size);
+		if (!events.isEmpty()) {
+			return new ResponseEntity<List<EventDTO>>(events, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
 	}
 	
 }

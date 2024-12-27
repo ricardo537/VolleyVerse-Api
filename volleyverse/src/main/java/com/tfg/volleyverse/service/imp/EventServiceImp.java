@@ -7,15 +7,23 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.DeleteEventDTO;
+import com.tfg.volleyverse.dto.EventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
+import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.model.Event;
+import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.model.User;
+import com.tfg.volleyverse.repository.ClubRepository;
 import com.tfg.volleyverse.repository.EventRepository;
+import com.tfg.volleyverse.repository.PlayerRepository;
 import com.tfg.volleyverse.repository.UserRepository;
 import com.tfg.volleyverse.service.EventService;
 
@@ -26,6 +34,10 @@ public class EventServiceImp implements EventService {
 	private EventRepository eventRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private ClubRepository clubRepository;
+	@Autowired
+	private PlayerRepository playerRepository;
 
 	@Override
 	public boolean addEvent(EventRegisterDTO eventDTO) {
@@ -97,6 +109,44 @@ public class EventServiceImp implements EventService {
 			return result;
 		}
 		return List.of();
+	}
+
+	@Override
+	public List<EventDTO> getFilteredEvents(FilterEventDTO filter, int page, int size) {
+		LocalDateTime now = LocalDateTime.now();
+		if (filter.getStartDate() == null || filter.getStartDate().isBefore(now)) {
+			filter.setStartDate(now);
+		}
+		List<Event> events = this.eventRepository.findByStartDateAfter(filter.getStartDate(), PageRequest.of(page, size)).getContent();
+		List<EventDTO> eventsDTO = events.stream()
+				.map((event) -> {
+					return new EventDTO(event, this.getNameCreator(event));
+				}).collect(Collectors.toList());
+		if (events.size() > 0) {
+			List<EventDTO> results = eventsDTO.stream()
+					.filter((event) -> (event.isValid(filter)))
+					.collect(Collectors.toList());
+			return results;
+		}
+		return eventsDTO;
+	}
+	
+	private String getNameCreator (Event event) {
+		User user = this.userRepository.findByIde(event.getCreatorId());
+		if (user != null && user.getType().equals("club")) {
+			Optional<Club> club = this.clubRepository.findById(user.getIde());
+			if (club.isPresent()) {
+				return club.get().getName();
+			}
+		} else {
+			if (user != null && user.getType().equals("player")) {
+				Optional<Player> player = this.playerRepository.findById(user.getIde());
+				if (player.isPresent()) {
+					return player.get().getName() + " " + player.get().getLastName();
+				}
+			}
+		}
+		return "";
 	}
 	
 }
