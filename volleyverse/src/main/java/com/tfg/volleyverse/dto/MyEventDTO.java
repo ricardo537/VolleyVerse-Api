@@ -1,74 +1,35 @@
-package com.tfg.volleyverse.model;
+package com.tfg.volleyverse.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.model.Event;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+public class MyEventDTO {
 
-@Entity
-@Table(name = "event")
-public class Event {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	
-	@Column(nullable = false)
 	private String name;
-	
-	@Column(nullable = false)
 	private String description;
-	
-	@Column(nullable = false)
 	private String address;
-	
-	@Column(nullable = false)
 	private LocalDateTime startDate;
-	
-	@Column(nullable = false)
 	private LocalDateTime endDate;
-	
-	@Column(nullable = false)
 	private String type;
-	
-	@Column(nullable = false)
 	private Integer minParticipants;
-	
-	@Column(nullable = false)
 	private Integer maxParticipants;
-	
-	@Column(nullable = false)
-	private UUID creatorId;
-	
-	@Column(nullable = false)
 	private Double price;
-	
-	@Column(nullable = true)
 	private String category;
-	
-	@Column(nullable = false)
 	private String gender;
-	
-	@Column(nullable = false)
 	private String typeParticipant;
-	
-	@Column(nullable = false)
 	private Boolean results;
 	
-	public Event() {
+	public MyEventDTO () {
 		
 	}
 
-	public Event(String name, String description, String address, LocalDateTime startDate, LocalDateTime endDate,
-			String type, Integer minParticipants, Integer maxParticipants, UUID creatorId, Double price,
+	public MyEventDTO(UUID id, String name, String description, String address, LocalDateTime startDate,
+			LocalDateTime endDate, String type, Integer minParticipants, Integer maxParticipants, Double price,
 			String category, String gender, String typeParticipant, Boolean results) {
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.address = address;
@@ -77,7 +38,6 @@ public class Event {
 		this.type = type;
 		this.minParticipants = minParticipants;
 		this.maxParticipants = maxParticipants;
-		this.creatorId = creatorId;
 		this.price = price;
 		this.category = category;
 		this.gender = gender;
@@ -85,7 +45,8 @@ public class Event {
 		this.results = results;
 	}
 	
-	public Event (EventRegisterDTO event, UUID creatorId) {
+	public MyEventDTO(Event event) {
+		this.id = event.getId();
 		this.name = event.getName();
 		this.description = event.getDescription();
 		this.address = event.getAddress();
@@ -94,12 +55,19 @@ public class Event {
 		this.type = event.getType();
 		this.minParticipants = event.getMinParticipants();
 		this.maxParticipants = event.getMaxParticipants();
-		this.creatorId = creatorId;
 		this.price = event.getPrice();
 		this.category = event.getCategory();
 		this.gender = event.getGender();
 		this.typeParticipant = event.getTypeParticipant();
 		this.results = event.getResults();
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -166,14 +134,6 @@ public class Event {
 		this.maxParticipants = maxParticipants;
 	}
 
-	public UUID getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(UUID creatorId) {
-		this.creatorId = creatorId;
-	}
-
 	public Double getPrice() {
 		return price;
 	}
@@ -212,10 +172,6 @@ public class Event {
 
 	public void setResults(Boolean results) {
 		this.results = results;
-	}
-
-	public UUID getId() {
-		return id;
 	}
 	
 }
