@@ -21,10 +21,12 @@ import com.tfg.volleyverse.dto.DeleteEventDTO;
 import com.tfg.volleyverse.dto.EventDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.FilterEventDTO;
+import com.tfg.volleyverse.dto.InscriptionDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.service.imp.EventServiceImp;
+import com.tfg.volleyverse.service.imp.InscriptionServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
 
 @RestController
@@ -35,6 +37,8 @@ public class EventController {
 	private EventServiceImp eventService;
 	@Autowired
 	private UserServiceImp userService;
+	@Autowired
+	private InscriptionServiceImp inscriptionService;
 	
 	@PostMapping("/add")
 	public ResponseEntity<Boolean> addEvent (@RequestBody EventRegisterDTO event) {
@@ -97,4 +101,31 @@ public class EventController {
 		return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
 	}
 	
+	@PostMapping("/join")
+	public ResponseEntity<Boolean> joinEvent (@RequestBody InscriptionDTO inscription) {
+		LoginDTO loginExists = this.userService.login(inscription.getLogin());
+		if (loginExists != null) {
+			boolean result = this.inscriptionService.joinEvent(inscription);
+			if (result) {
+				return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Boolean>(result, HttpStatus.NOT_FOUND);
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/unsubscribe")
+	public ResponseEntity<Boolean> unsubscribeEvent (@RequestBody InscriptionDTO inscription) {
+		LoginDTO loginExists = this.userService.login(inscription.getLogin());
+		if (loginExists != null) {
+			boolean result = this.inscriptionService.unsubscribeEvent(inscription);
+			if (result) {
+				return new ResponseEntity<Boolean>(result, HttpStatus.ACCEPTED);
+			} else {
+				return new ResponseEntity<Boolean>(result, HttpStatus.NOT_FOUND);
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
 }

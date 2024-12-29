@@ -26,4 +26,5 @@ public interface EventService {
 	List<MyEventDTO> getMyCompletedEvents (LoginDTO login);
 	
 	List<EventDTO> getFilteredEvents (FilterEventDTO filter, int page, int size);
+	
 }
