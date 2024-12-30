@@ -74,6 +74,10 @@ public class EventServiceImp implements EventService {
 		if (user != null) {
 			Optional<Event> eventExists = this.eventRepository.findById(event.getId());
 			if (eventExists.isPresent() && eventExists.get().getCreatorId().toString().equals(user.getIde().toString())) {
+				List<Inscription> inscriptions = this.inscriptionRepository.findByEventId(eventExists.get().getId());
+				inscriptions.stream().forEach(inscription -> {
+					this.inscriptionRepository.delete(inscription);
+				});
 				this.eventRepository.delete(eventExists.get());
 				return true;
 			}
