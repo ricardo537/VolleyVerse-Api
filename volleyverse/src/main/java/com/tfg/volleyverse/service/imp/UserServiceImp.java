@@ -2,6 +2,7 @@ package com.tfg.volleyverse.service.imp;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,6 +161,15 @@ public class UserServiceImp implements UserService {
 		invitations.stream().forEach(invitation -> {
 			this.invitationRepository.delete(invitation);
 		});
+	}
+
+	@Override
+	public UUID getMyId(LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if ( user != null) {
+			return user.getIde();
+		}
+		return null;
 	}
 
 }

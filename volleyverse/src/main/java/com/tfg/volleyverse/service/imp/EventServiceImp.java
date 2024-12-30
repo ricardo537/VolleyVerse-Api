@@ -69,7 +69,6 @@ public class EventServiceImp implements EventService {
 
 	@Override
 	public boolean deleteEvent(DeleteEventDTO event) {
-		//Falta borrar las trazas
 		User user = this.userRepository.findByEmailAndPassword(event.getLogin().getEmail(), event.getLogin().getPassword());
 		if (user != null) {
 			Optional<Event> eventExists = this.eventRepository.findById(event.getId());
@@ -137,10 +136,13 @@ public class EventServiceImp implements EventService {
 		List<Event> events = this.eventRepository.findByStartDateAfter(filter.getStartDate(), PageRequest.of(page, size)).getContent();
 		List<EventDTO> eventsDTO = events.stream()
 				.map((event) -> {
-					if (this.isEnrolled(event, filter.getLogin())) {
-						return null;
+					if (this.userCanJoinEvent(event, filter.getLogin())) {
+						if (this.isEnrolled(event, filter.getLogin())) {
+							return null;
+						}
+						return new EventDTO(event, this.getNameCreator(event));
 					}
-					return new EventDTO(event, this.getNameCreator(event));
+					return null;
 				}).filter(e -> e != null)
 				.collect(Collectors.toList());
 		if (events.size() > 0) {
@@ -150,6 +152,22 @@ public class EventServiceImp implements EventService {
 			return results;
 		}
 		return eventsDTO;
+	}
+	
+	private boolean userCanJoinEvent (Event event, LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			if (user.getType().equals("club")) {
+				if (event.getTypeParticipant().equals("player")) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private String getNameCreator (Event event) {

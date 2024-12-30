@@ -1,5 +1,7 @@
 package com.tfg.volleyverse.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +46,14 @@ public class AuthController {
 			return new ResponseEntity<Object>(success, HttpStatus.OK);
 		}
 		return new ResponseEntity<Object>(success, HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/getMyId")
+	public ResponseEntity<String> getMyId (@RequestBody LoginDTO login) {
+		UUID result = this.userService.getMyId(login);
+		if (result != null) {
+			return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 	}
 }

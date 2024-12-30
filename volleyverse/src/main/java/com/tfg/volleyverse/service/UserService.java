@@ -1,5 +1,7 @@
 package com.tfg.volleyverse.service;
 
+import java.util.UUID;
+
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterUserDTO;
 
@@ -12,4 +14,6 @@ public interface UserService {
 	Object getUserData (LoginDTO login);
 	
 	boolean updateProfileImg (String email, String fileName);
+	
+	UUID getMyId (LoginDTO login);
 }
