@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,4 +18,6 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Inscri
 	void delete (Inscription inscription);
 	
 	Optional<Inscription> findByParticipantIdAndEventId (UUID participantId, UUID eventId);
+	
+	List<Inscription> findByEventId (UUID eventId);
 }

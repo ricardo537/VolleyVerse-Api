@@ -9,17 +9,19 @@ public class FilterEventDTO {
 	private String category;
 	private String gender;
 	private String typeParticipant;
+	private LoginDTO login;
 	
 	public FilterEventDTO () {
 		
 	}
 
-	public FilterEventDTO(LocalDateTime startDate, String type, String category, String gender, String typeParticipant) {
+	public FilterEventDTO(LocalDateTime startDate, String type, String category, String gender, String typeParticipant, LoginDTO login) {
 		this.startDate = startDate;
 		this.type = type;
 		this.category = category;
 		this.gender = gender;
 		this.typeParticipant = typeParticipant;
+		this.login = login;
 	}
 
 	public LocalDateTime getStartDate() {
@@ -60,6 +62,14 @@ public class FilterEventDTO {
 
 	public void setTypeParticipant(String typeParticipant) {
 		this.typeParticipant = typeParticipant;
+	}
+
+	public LoginDTO getLogin() {
+		return login;
+	}
+
+	public void setLogin(LoginDTO login) {
+		this.login = login;
 	}
 	
 }

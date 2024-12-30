@@ -19,11 +19,18 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.model.Event;
+import com.tfg.volleyverse.model.Inscription;
+import com.tfg.volleyverse.model.Play;
+import com.tfg.volleyverse.model.PlayId;
 import com.tfg.volleyverse.model.Player;
+import com.tfg.volleyverse.model.Team;
 import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.repository.ClubRepository;
 import com.tfg.volleyverse.repository.EventRepository;
+import com.tfg.volleyverse.repository.InscriptionRepository;
+import com.tfg.volleyverse.repository.PlayRepository;
 import com.tfg.volleyverse.repository.PlayerRepository;
+import com.tfg.volleyverse.repository.TeamRepository;
 import com.tfg.volleyverse.repository.UserRepository;
 import com.tfg.volleyverse.service.EventService;
 
@@ -38,6 +45,12 @@ public class EventServiceImp implements EventService {
 	private ClubRepository clubRepository;
 	@Autowired
 	private PlayerRepository playerRepository;
+	@Autowired
+	private InscriptionRepository inscriptionRepository;
+	@Autowired
+	private TeamRepository teamRepository;
+	@Autowired
+	private PlayRepository playRepository;
 
 	@Override
 	public boolean addEvent(EventRegisterDTO eventDTO) {
@@ -120,8 +133,12 @@ public class EventServiceImp implements EventService {
 		List<Event> events = this.eventRepository.findByStartDateAfter(filter.getStartDate(), PageRequest.of(page, size)).getContent();
 		List<EventDTO> eventsDTO = events.stream()
 				.map((event) -> {
+					if (this.isEnrolled(event, filter.getLogin())) {
+						return null;
+					}
 					return new EventDTO(event, this.getNameCreator(event));
-				}).collect(Collectors.toList());
+				}).filter(e -> e != null)
+				.collect(Collectors.toList());
 		if (events.size() > 0) {
 			List<EventDTO> results = eventsDTO.stream()
 					.filter((event) -> (event.isValid(filter)))
@@ -147,6 +164,61 @@ public class EventServiceImp implements EventService {
 			}
 		}
 		return "";
+	}
+	
+	private boolean isEnrolled(Event event, LoginDTO login) {
+		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+		if (user != null) {
+			if (event.getTypeParticipant().equals("player")) {
+				Optional<Player> player = this.playerRepository.findById(user.getIde());
+				if (player.isPresent()) {
+					Optional<Inscription> inscription = this.inscriptionRepository.findByParticipantIdAndEventId(player.get().getId(), event.getId());
+					return inscription.isPresent();
+				}
+			} else {
+				return this.userPlaysInTeamsEnrolled(user, event.getId());
+			}
+		}
+		return false;
+	}
+	
+	private boolean userPlaysInTeamsEnrolled (User user, UUID eventId) {
+		List<Inscription> inscriptions = this.inscriptionRepository.findByEventId(eventId);
+		List<Team> teamsEnrolled = inscriptions.stream()
+				.map((inscription) -> {
+					Optional<Team> team = this.teamRepository.findById(inscription.getParticipantId());
+					if (team.isPresent()) {
+						return team.get();
+					}
+					return null;
+				}).filter(i -> i != null)
+				.collect(Collectors.toList());
+		switch (user.getType()) {
+		case "player": {
+			List<Boolean> result = teamsEnrolled.stream()
+					.map((team) -> {
+						Optional<Play> play = this.playRepository.findById(new PlayId(team.getId(), user.getIde()));
+						return play.isPresent();
+					}).filter(t -> t == true)
+					.collect(Collectors.toList());
+			if (result.size() > 0) {
+				return true;
+			}
+			break;
+		}
+		case "club": {
+			List<Boolean> result = teamsEnrolled.stream()
+					.map((team) -> {
+						return team.getClubId().toString().equals(user.getIde().toString());
+					}).filter(t -> t == true)
+					.collect(Collectors.toList());
+			if (result.size() > 0) {
+				return true;
+			}
+			break;
+		}
+		}
+		return false;
 	}
 	
 }

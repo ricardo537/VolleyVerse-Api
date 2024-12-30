@@ -1,6 +1,7 @@
 package com.tfg.volleyverse.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 public class InscriptionId implements Serializable {
@@ -36,4 +37,22 @@ public class InscriptionId implements Serializable {
 	public void setEventId(UUID eventId) {
 		this.eventId = eventId;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(eventId, participantId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InscriptionId other = (InscriptionId) obj;
+		return Objects.equals(eventId, other.eventId) && Objects.equals(participantId, other.participantId);
+	}
+	
 }
