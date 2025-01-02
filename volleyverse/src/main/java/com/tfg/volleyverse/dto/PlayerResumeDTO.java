@@ -4,10 +4,8 @@ import java.util.UUID;
 
 import com.tfg.volleyverse.model.Player;
 
-public class PlayerResumeDTO {
+public class PlayerResumeDTO extends ResumeDTO{
 	
-	private UUID id;
-	private String name;
 	private String last_name;
 	private String description;
 	private String img;

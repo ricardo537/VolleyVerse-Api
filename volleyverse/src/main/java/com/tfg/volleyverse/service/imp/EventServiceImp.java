@@ -17,6 +17,10 @@ import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
+import com.tfg.volleyverse.dto.ParticipantsDTO;
+import com.tfg.volleyverse.dto.PlayerResumeDTO;
+import com.tfg.volleyverse.dto.ResumeDTO;
+import com.tfg.volleyverse.dto.TeamResumeDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.model.Inscription;
@@ -241,6 +245,48 @@ public class EventServiceImp implements EventService {
 		}
 		}
 		return false;
+	}
+
+	@Override
+	public List<ResumeDTO> getParticipants(ParticipantsDTO participantsData) {
+		Optional<Event> event = this.eventRepository.findById(participantsData.getEventId());
+		if (event.isPresent()) {
+			List<Inscription> inscriptions = this.inscriptionRepository.findByEventId(participantsData.getEventId());
+			if (event.get().getTypeParticipant().equals("player")) {
+				List<ResumeDTO> participants = inscriptions.stream()
+						.map(i -> {
+							Optional<Player> player = this.playerRepository.findById(i.getParticipantId());
+							if (player.isPresent()) {
+								return new PlayerResumeDTO(player.get());
+							}
+							return null;
+						}).filter(p -> p != null)
+						.collect(Collectors.toList());
+				return participants;
+			} else {
+				List<ResumeDTO> participants = inscriptions.stream()
+						.map(i -> {
+							Optional<Team> team = this.teamRepository.findById(i.getParticipantId());
+							if (team.isPresent()) {
+								List<Play> plays = this.playRepository.findByTeamId(team.get().getId());
+								List<PlayerResumeDTO> members = plays.stream()
+										.map(play -> {
+											Optional<Player> player = this.playerRepository.findById(play.getPlayerId());
+											if (player.isPresent()) {
+												return new PlayerResumeDTO(player.get());
+											} 
+											return null;
+										}).filter(member -> member != null)
+										.collect(Collectors.toList());
+								return new TeamResumeDTO(team.get(), members);
+							}
+							return null;
+						}).filter(p -> p != null)
+						.collect(Collectors.toList());
+				return participants;
+			}
+		}
+		return List.of();
 	}
 	
 }

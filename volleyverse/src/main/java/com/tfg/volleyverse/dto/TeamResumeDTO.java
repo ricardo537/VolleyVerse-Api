@@ -5,10 +5,8 @@ import java.util.UUID;
 
 import com.tfg.volleyverse.model.Team;
 
-public class TeamResumeDTO {
+public class TeamResumeDTO extends ResumeDTO{
 
-	private UUID id;
-	private String name;
 	private List<PlayerResumeDTO> members;
 	
 	public TeamResumeDTO () {

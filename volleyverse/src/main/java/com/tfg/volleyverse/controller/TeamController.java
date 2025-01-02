@@ -26,7 +26,6 @@ import com.tfg.volleyverse.dto.TeamDTO;
 import com.tfg.volleyverse.dto.TeamResumeDTO;
 import com.tfg.volleyverse.model.Invitation;
 import com.tfg.volleyverse.model.Play;
-import com.tfg.volleyverse.model.User;
 import com.tfg.volleyverse.service.imp.InvitationServiceImp;
 import com.tfg.volleyverse.service.imp.PlayServiceImp;
 import com.tfg.volleyverse.service.imp.TeamServiceImp;

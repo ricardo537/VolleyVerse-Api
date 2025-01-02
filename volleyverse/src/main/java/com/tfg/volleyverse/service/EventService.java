@@ -9,6 +9,8 @@ import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
+import com.tfg.volleyverse.dto.ParticipantsDTO;
+import com.tfg.volleyverse.dto.ResumeDTO;
 import com.tfg.volleyverse.model.Event;
 
 public interface EventService {
@@ -26,5 +28,7 @@ public interface EventService {
 	List<MyEventDTO> getMyCompletedEvents (LoginDTO login);
 	
 	List<EventDTO> getFilteredEvents (FilterEventDTO filter, int page, int size);
+	
+	List<ResumeDTO> getParticipants (ParticipantsDTO participantsData);
 	
 }

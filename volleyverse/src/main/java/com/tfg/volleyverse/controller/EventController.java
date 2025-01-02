@@ -24,6 +24,8 @@ import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.InscriptionDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
+import com.tfg.volleyverse.dto.ParticipantsDTO;
+import com.tfg.volleyverse.dto.ResumeDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.service.imp.EventServiceImp;
 import com.tfg.volleyverse.service.imp.InscriptionServiceImp;
@@ -127,5 +129,18 @@ public class EventController {
 			}
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/getParticipants")
+	public ResponseEntity<List<ResumeDTO>> getParticipants(@RequestBody ParticipantsDTO participantsData) {
+		LoginDTO login = this.userService.login(participantsData.getLogin());
+		if (login != null) {
+			List<ResumeDTO> participants = this.eventService.getParticipants(participantsData);
+			if (participants.isEmpty()) {
+				return new ResponseEntity<List<ResumeDTO>>(participants, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<List<ResumeDTO>>(participants, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<ResumeDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 }

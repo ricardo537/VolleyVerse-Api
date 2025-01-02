@@ -147,22 +147,17 @@ public class TeamServiceImp implements TeamService {
 	public List<TeamResumeDTO> getFilteredTeams(FilterTeamDTO filter) {
 		User user = this.userRepository.findByEmailAndPassword(filter.getLogin().getEmail(), filter.getLogin().getPassword());
 		if (user.getType().equals("club")) {
-			System.out.println("Es un club");
 			List<Team> teams = this.teamRepository.findByClubId(user.getIde());
-			System.out.println(teams.toString());
 			List<TeamResumeDTO> filteredTeams = teams.stream()
 					.filter(t -> this.isValidTeam(t, filter))
 					.map(team -> {
 						List<PlayerResumeDTO> members = this.getMembersOfTeam(team.getId());
 						return new TeamResumeDTO(team, members);
 					}).collect(Collectors.toList());
-			System.out.println(filteredTeams.toString());
 			return filteredTeams;
 		} else {
 			if (user.getType().equals("player")) {
-				System.out.println("Es un jugador");
 				List<Play> plays = this.playRepository.findByPlayerId(user.getIde());
-				System.out.println(plays.toString());
 				List<TeamResumeDTO> filteredTeams = plays.stream()
 						.map(p -> {
 							Optional<Team> team = this.teamRepository.findById(p.getTeamId());
@@ -177,7 +172,6 @@ public class TeamServiceImp implements TeamService {
 							List<PlayerResumeDTO> members = this.getMembersOfTeam(team.getId());
 							return new TeamResumeDTO(team, members);
 						}).collect(Collectors.toList());
-				System.out.println(filteredTeams.toString());
 				return filteredTeams;
 			}
 		}
