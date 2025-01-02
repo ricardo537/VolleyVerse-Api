@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.dto.AddPlayerToTeamDTO;
+import com.tfg.volleyverse.dto.FilterTeamDTO;
 import com.tfg.volleyverse.dto.InvitationAcceptDTO;
 import com.tfg.volleyverse.dto.InvitationDTO;
 import com.tfg.volleyverse.dto.InvitationSendDTO;
@@ -22,6 +23,7 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.dto.TeamDTO;
+import com.tfg.volleyverse.dto.TeamResumeDTO;
 import com.tfg.volleyverse.model.Invitation;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.User;
@@ -146,5 +148,18 @@ public class TeamController {
 			return new ResponseEntity<List<InvitationDTO>>(invitations, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<InvitationDTO>>(List.of(), HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping("/getFilteredTeams")
+	public ResponseEntity<List<TeamResumeDTO>> getFilteredTeams (@RequestBody FilterTeamDTO filter) {
+		LoginDTO login = this.userService.login(filter.getLogin());
+		if (login != null) {
+			List<TeamResumeDTO> filteredTeams = this.teamService.getFilteredTeams(filter);
+			if (filteredTeams.isEmpty()) {
+				return new ResponseEntity<List<TeamResumeDTO>>(filteredTeams, HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<List<TeamResumeDTO>>(filteredTeams, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<TeamResumeDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 }

@@ -122,7 +122,7 @@ public class InscriptionServiceImp implements InscriptionService {
 	private boolean isValidTeam (Event event, UUID teamId) {
 		Optional<Team> team = this.teamRepository.findById(teamId);
 		if (team.isPresent()) {
-			return event.getTypeParticipant().equals(team.get().getType());
+			return (event.getTypeParticipant().equals(team.get().getType()) && event.getGender().equals(team.get().getGender()) && event.getCategory().equals(team.get().getCategory()));
 		}
 		return false;
 	}
