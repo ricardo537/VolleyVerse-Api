@@ -31,4 +31,8 @@ public interface EventService {
 	
 	List<ResumeDTO> getParticipants (ParticipantsDTO participantsData);
 	
+	List<EventDTO> getPastEventsJoined (LoginDTO login);
+	
+	List<EventDTO> getFutureEventsJoined (LoginDTO login);
+	
 }

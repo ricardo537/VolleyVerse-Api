@@ -143,4 +143,36 @@ public class EventController {
 		}
 		return new ResponseEntity<List<ResumeDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
+	
+	/*
+	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
+	 */
+	@PostMapping("/getPastEventsJoined")
+	public ResponseEntity<List<EventDTO>> getPastEventsJoined(@RequestBody LoginDTO login) {
+		LoginDTO loginExists = this.userService.login(login);
+		if (loginExists != null) {
+			List<EventDTO> events = this.eventService.getPastEventsJoined(loginExists);
+			if (events.isEmpty()) {
+				return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
+			} 
+			return new ResponseEntity<List<EventDTO>>(events, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<EventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	/*
+	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
+	 */
+	@PostMapping("/getFutureEventsJoined")
+	public ResponseEntity<List<EventDTO>> getFutureEventsJoined(@RequestBody LoginDTO login) {
+		LoginDTO loginExists = this.userService.login(login);
+		if (loginExists != null) {
+			List<EventDTO> events = this.eventService.getFutureEventsJoined(loginExists);
+			if (events.isEmpty()) {
+				return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
+			} 
+			return new ResponseEntity<List<EventDTO>>(events, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<EventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+	}
 }

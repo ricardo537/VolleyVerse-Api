@@ -20,4 +20,6 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Inscri
 	Optional<Inscription> findByParticipantIdAndEventId (UUID participantId, UUID eventId);
 	
 	List<Inscription> findByEventId (UUID eventId);
+	
+	List<Inscription> findByParticipantId (UUID participantId);
 }
