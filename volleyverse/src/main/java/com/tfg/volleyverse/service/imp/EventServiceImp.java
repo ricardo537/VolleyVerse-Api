@@ -305,7 +305,7 @@ public class EventServiceImp implements EventService {
 				eventsAlone.addAll(eventsWithTeams);
 				List<EventJoinedDTO> events = eventsAlone.stream()
 						.map(e -> {
-							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), user.getIde());
+							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e));
 							return event;
 						}).collect(Collectors.toList());
 				return events;

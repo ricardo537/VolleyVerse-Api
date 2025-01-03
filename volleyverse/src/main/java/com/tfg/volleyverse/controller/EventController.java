@@ -145,9 +145,6 @@ public class EventController {
 		return new ResponseEntity<List<ResumeDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 	
-	/*
-	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
-	 */
 	@PostMapping("/getPastEventsJoined")
 	public ResponseEntity<List<EventJoinedDTO>> getPastEventsJoined(@RequestBody LoginDTO login) {
 		LoginDTO loginExists = this.userService.login(login);
@@ -161,9 +158,6 @@ public class EventController {
 		return new ResponseEntity<List<EventJoinedDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 	
-	/*
-	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
-	 */
 	@PostMapping("/getFutureEventsJoined")
 	public ResponseEntity<List<EventJoinedDTO>> getFutureEventsJoined(@RequestBody LoginDTO login) {
 		LoginDTO loginExists = this.userService.login(login);
