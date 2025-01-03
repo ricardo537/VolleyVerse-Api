@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sun.net.httpserver.Authenticator.Success;
 import com.tfg.volleyverse.dto.DeleteEventDTO;
 import com.tfg.volleyverse.dto.EventDTO;
+import com.tfg.volleyverse.dto.EventJoinedDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.InscriptionDTO;
@@ -148,31 +149,31 @@ public class EventController {
 	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
 	 */
 	@PostMapping("/getPastEventsJoined")
-	public ResponseEntity<List<EventDTO>> getPastEventsJoined(@RequestBody LoginDTO login) {
+	public ResponseEntity<List<EventJoinedDTO>> getPastEventsJoined(@RequestBody LoginDTO login) {
 		LoginDTO loginExists = this.userService.login(login);
 		if (loginExists != null) {
-			List<EventDTO> events = this.eventService.getPastEventsJoined(loginExists);
+			List<EventJoinedDTO> events = this.eventService.getPastEventsJoined(loginExists);
 			if (events.isEmpty()) {
-				return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<List<EventJoinedDTO>>(events, HttpStatus.NOT_FOUND);
 			} 
-			return new ResponseEntity<List<EventDTO>>(events, HttpStatus.OK);
+			return new ResponseEntity<List<EventJoinedDTO>>(events, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<EventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<List<EventJoinedDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 	
 	/*
 	 * Tiene que devolver otro DTO que incluya el id del participante para poder desapuntarse
 	 */
 	@PostMapping("/getFutureEventsJoined")
-	public ResponseEntity<List<EventDTO>> getFutureEventsJoined(@RequestBody LoginDTO login) {
+	public ResponseEntity<List<EventJoinedDTO>> getFutureEventsJoined(@RequestBody LoginDTO login) {
 		LoginDTO loginExists = this.userService.login(login);
 		if (loginExists != null) {
-			List<EventDTO> events = this.eventService.getFutureEventsJoined(loginExists);
+			List<EventJoinedDTO> events = this.eventService.getFutureEventsJoined(loginExists);
 			if (events.isEmpty()) {
-				return new ResponseEntity<List<EventDTO>>(events, HttpStatus.NOT_FOUND);
+				return new ResponseEntity<List<EventJoinedDTO>>(events, HttpStatus.NOT_FOUND);
 			} 
-			return new ResponseEntity<List<EventDTO>>(events, HttpStatus.OK);
+			return new ResponseEntity<List<EventJoinedDTO>>(events, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<EventDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<List<EventJoinedDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
 	}
 }

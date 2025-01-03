@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.DeleteEventDTO;
 import com.tfg.volleyverse.dto.EventDTO;
+import com.tfg.volleyverse.dto.EventJoinedDTO;
 import com.tfg.volleyverse.dto.EventRegisterDTO;
 import com.tfg.volleyverse.dto.FilterEventDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
@@ -294,7 +295,7 @@ public class EventServiceImp implements EventService {
 	}
 
 	
-	private List<EventDTO> getEventsJoined(LoginDTO login) {
+	private List<EventJoinedDTO> getEventsJoined(LoginDTO login) {
 		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
 		if (user != null) {
 			switch (user.getType()) {
@@ -302,18 +303,18 @@ public class EventServiceImp implements EventService {
 				List<Event> eventsAlone = this.getEventsJoinedAlone(user.getIde());
 				List<Event> eventsWithTeams = this.getEventsJoinedWithTeam(user.getIde(), user.getType());
 				eventsAlone.addAll(eventsWithTeams);
-				List<EventDTO> events = eventsAlone.stream()
+				List<EventJoinedDTO> events = eventsAlone.stream()
 						.map(e -> {
-							EventDTO event = new EventDTO(e, this.getNameCreator(e));
+							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), user.getIde());
 							return event;
 						}).collect(Collectors.toList());
 				return events;
 			}
 			case "club": {
 				List<Event> eventsOfTeams = this.getEventsJoinedWithTeam(user.getIde(), user.getType());
-				List<EventDTO> events = eventsOfTeams.stream()
+				List<EventJoinedDTO> events = eventsOfTeams.stream()
 						.map(e -> {
-							EventDTO event = new EventDTO(e, this.getNameCreator(e));
+							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e));
 							return event;
 						}).collect(Collectors.toList());
 				return events;
@@ -321,6 +322,52 @@ public class EventServiceImp implements EventService {
 			}
 		}
 		return List.of();
+	}
+	
+	private UUID getParticipant(User user, Event event) {
+		List<Inscription> inscriptions = this.inscriptionRepository.findByEventId(event.getId());
+		UUID participantId = null;
+		if (event.getTypeParticipant().equals("player")) {
+			return user.getIde();
+		} else {
+			if (user.getType().equals("player")) {
+				List<Play> plays = this.playRepository.findByPlayerId(user.getIde());
+				List<Team> teams = plays.stream()
+						.map(p -> {
+							Optional<Team> team = this.teamRepository.findById(p.getTeamId());
+							if (team.isPresent()) {
+								return team.get();
+							}
+							return null;
+						}).filter(t -> t != null)
+						.collect(Collectors.toList());
+				List<UUID> participants = inscriptions.stream().map(i -> {
+					for (Team team: teams) {
+						if (team.getId().toString().equals(i.getParticipantId().toString())) {
+							return i.getParticipantId();
+						}
+						return null;
+					}
+					return null;
+				}).filter(p -> p != null)
+				.collect(Collectors.toList());
+				participantId = participants.get(0);
+			} else {
+				List<Team> teams = this.teamRepository.findByClubId(user.getIde());
+				List<UUID> participants = inscriptions.stream().map(i -> {
+					for (Team team: teams) {
+						if (team.getId().toString().equals(i.getParticipantId().toString())) {
+							return i.getParticipantId();
+						}
+						return null;
+					}
+					return null;
+				}).filter(p -> p != null)
+				.collect(Collectors.toList());
+				participantId = participants.get(0);
+			}
+		}
+		return participantId;
 	}
 	
 	private List<Event> getEventsJoinedAlone(UUID userId) {
@@ -379,18 +426,18 @@ public class EventServiceImp implements EventService {
 		return List.of();	}
 
 	@Override
-	public List<EventDTO> getPastEventsJoined(LoginDTO login) {
-		List<EventDTO> events = this.getEventsJoined(login);
+	public List<EventJoinedDTO> getPastEventsJoined(LoginDTO login) {
+		List<EventJoinedDTO> events = this.getEventsJoined(login);
 		LocalDateTime now = LocalDateTime.now();
-		List<EventDTO> result = events.stream().filter(e -> e.getStartDate().isBefore(now)).collect(Collectors.toList());
+		List<EventJoinedDTO> result = events.stream().filter(e -> e.getStartDate().isBefore(now)).collect(Collectors.toList());
 		return result;
 	}
 
 	@Override
-	public List<EventDTO> getFutureEventsJoined(LoginDTO login) {
-		List<EventDTO> events = this.getEventsJoined(login);
+	public List<EventJoinedDTO> getFutureEventsJoined(LoginDTO login) {
+		List<EventJoinedDTO> events = this.getEventsJoined(login);
 		LocalDateTime now = LocalDateTime.now();
-		List<EventDTO> result = events.stream().filter(e -> e.getStartDate().isAfter(now)).collect(Collectors.toList());
+		List<EventJoinedDTO> result = events.stream().filter(e -> e.getStartDate().isAfter(now)).collect(Collectors.toList());
 		return result;
 	}
 	
