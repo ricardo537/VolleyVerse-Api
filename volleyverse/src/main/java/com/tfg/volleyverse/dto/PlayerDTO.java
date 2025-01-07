@@ -8,18 +8,18 @@ public class PlayerDTO {
 	private String name;
 	private String last_name;
 	private String description;
-	private double level;
+	private String gender;
 	private String img;
 	
 	public PlayerDTO () {
 		
 	}
 	
-	public PlayerDTO(String name, String last_name, String description, double level) {
+	public PlayerDTO(String name, String last_name, String description, String gender) {
 		this.name = name;
 		this.last_name = last_name;
 		this.description = description;
-		this.level = level;
+		this.gender = gender;
 	}
 
 
@@ -28,7 +28,7 @@ public class PlayerDTO {
 		this.name = player.getName();
 		this.last_name = player.getLastName();
 		this.description = player.getDescription();
-		this.level = player.getLevel();
+		this.gender = player.getGender();
 		this.img = img;
 	}
 
@@ -64,12 +64,12 @@ public class PlayerDTO {
 		this.description = description;
 	}
 
-	public double getLevel() {
-		return level;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setLevel(double level) {
-		this.level = level;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 }

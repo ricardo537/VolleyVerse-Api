@@ -351,6 +351,7 @@ public class EventServiceImp implements EventService {
 					return null;
 				}).filter(p -> p != null)
 				.collect(Collectors.toList());
+				if (participants.size() > 0) 
 				participantId = participants.get(0);
 			} else {
 				List<Team> teams = this.teamRepository.findByClubId(user.getIde());
