@@ -27,13 +27,16 @@ public class ClubServiceImp implements ClubService {
 
 	@Override
 	public boolean registerClub(RegisterClubDTO register) {
-		Club club = this.clubRepository.save(new Club(register));
-		if (club != null) {
-			User user = this.userRepository.save(new User(new RegisterUserDTO(register.getEmail(), register.getPassword(), "club", club.getId())));
-			if (user != null) {
-				return true;
-			} else {
-				this.clubRepository.delete(club);
+		Optional<Club> clubExist = clubRepository.findByName(register.getName());
+		if (clubExist.isEmpty()) {
+			Club club = this.clubRepository.save(new Club(register));
+			if (club != null) {
+				User user = this.userRepository.save(new User(new RegisterUserDTO(register.getEmail(), register.getPassword(), "club", club.getId())));
+				if (user != null) {
+					return true;
+				} else {
+					this.clubRepository.delete(club);
+				}
 			}
 		}
 		return false;
