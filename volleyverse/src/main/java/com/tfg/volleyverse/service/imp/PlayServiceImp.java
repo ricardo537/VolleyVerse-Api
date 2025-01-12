@@ -55,9 +55,11 @@ public class PlayServiceImp implements PlayService {
 					break;
 				}
 				}
-				Play success = this.playRepository.save(play);
-				if (success != null) {
-					return true;
+				if (team.getGender().equals("mix") || team.getGender().equals(player.get().getGender())) {
+					Play success = this.playRepository.save(play);
+					if (success != null) {
+						return true;
+					}
 				}
 			}
 		}

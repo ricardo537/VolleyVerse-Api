@@ -45,11 +45,22 @@ public class TeamServiceImp implements TeamService {
 	@Override
 	public UUID createTeam(TeamCreationDTO team) {
 		UUID club_id = this.getClubId(team.getLogin());
-		team.setClubId(club_id);
+		if (club_id != null) {
+			team.setClubId(club_id);
+		} else {
+			User user = this.userRepository.findByEmailAndPassword(team.getLogin().getEmail(), team.getLogin().getPassword());
+			Optional<Player> player = this.playerRepository.findById(user.getIde());
+			if (player.isPresent()) {
+				if (!team.getGender().equals("mix") && !player.get().getGender().equals(team.getGender())) {
+					return null;
+				}
+			}
+		}
+		
 		Team teamSaved = this.teamRepository.save(new Team(team));
 		if (teamSaved != null) {
 			return teamSaved.getId();
-		}
+		} 
 		return null;
 	}
 	
