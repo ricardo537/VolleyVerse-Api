@@ -15,5 +15,5 @@ public interface PlayerService {
 	
 	LoginDTO updatePlayer (UpdatePlayerDTO update);
 	
-	List<PlayerResumeDTO> searchPlayers (String nameTotal);
+	List<PlayerResumeDTO> searchPlayers (String gender, String nameTotal);
 }

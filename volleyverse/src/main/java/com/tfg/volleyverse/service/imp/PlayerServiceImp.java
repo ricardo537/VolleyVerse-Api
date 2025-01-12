@@ -84,11 +84,12 @@ public class PlayerServiceImp implements PlayerService {
 	}
 
 	@Override
-	public List<PlayerResumeDTO> searchPlayers(String nameTotal) {
+	public List<PlayerResumeDTO> searchPlayers(String gender, String nameTotal) {
 		try {
 			String[] name = splitName(nameTotal);
 			List<Player> players = this.playerRepository.findByNameStartingWithAndLastNameStartingWith(name[0], name[1]);
 			List<PlayerResumeDTO> playersResumeWithoutImg = players.stream()
+					.filter(player -> (gender.equals("mix") || player.getGender().equals(gender)))
 					.map(PlayerResumeDTO::new)
 					.collect(Collectors.toList());
 			List<PlayerResumeDTO> playersResumeResult = playersResumeWithoutImg.stream()

@@ -54,8 +54,8 @@ public class PlayerController {
 	}
 	
 	@GetMapping("/search") 
-	public ResponseEntity<List<PlayerResumeDTO>> searchPlayers (@RequestParam String name) {
-		List<PlayerResumeDTO> success = this.playerService.searchPlayers(name);
+	public ResponseEntity<List<PlayerResumeDTO>> searchPlayers (@RequestParam String gender, @RequestParam String name) {
+		List<PlayerResumeDTO> success = this.playerService.searchPlayers(gender, name);
 		if (success.isEmpty()) {
 			return new ResponseEntity<List<PlayerResumeDTO>>(success, HttpStatus.NOT_FOUND);
 		}
