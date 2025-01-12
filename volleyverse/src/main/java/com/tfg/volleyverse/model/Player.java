@@ -29,24 +29,24 @@ public class Player {
 	private String description;
 	
 	@Column(nullable = true)
-	private double level;
+	private String gender;
 
 	private Player () {
 		
 	}
 	
-	public Player (String name, String lastName, String description, double level) {
+	public Player (String name, String lastName, String description, String gender) {
 		this.name = name;
 		this.lastName = lastName;
 		this.description = description;
-		this.level = level;
+		this.gender = gender;
 	}
 	
 	public Player (RegisterPlayerDTO register) {
 		this.name = register.getName();
 		this.lastName = register.getLast_name();
 		this.description = "";
-		this.level = 0;
+		this.gender = register.getGender();
 	}
 	
 	public void update (UpdatePlayerDTO update) {
@@ -89,12 +89,12 @@ public class Player {
 		this.description = description;
 	}
 
-	public double getLevel() {
-		return level;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setLevel(double level) {
-		this.level = level;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 	

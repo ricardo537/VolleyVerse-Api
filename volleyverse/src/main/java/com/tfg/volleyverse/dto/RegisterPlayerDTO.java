@@ -6,16 +6,18 @@ public class RegisterPlayerDTO {
 	private String password;
 	private String name;
 	private String last_name;
+	private String gender;
 	
 	RegisterPlayerDTO () {
 		
 	}
 	
-	RegisterPlayerDTO (String email, String password, String name, String last_name) {
+	RegisterPlayerDTO (String email, String password, String name, String last_name, String gender) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.last_name = last_name;
+		this.gender = gender;
 	}
 
 	public String getEmail() {
@@ -48,6 +50,14 @@ public class RegisterPlayerDTO {
 
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 }

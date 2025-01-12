@@ -25,7 +25,7 @@ public class ClubController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<Boolean> registerClub (@RequestBody RegisterClubDTO register) {
-		LoginDTO foundUser = this.userService.login(new LoginDTO(register.getEmail(), register.getPassword(), "player"));
+		LoginDTO foundUser = this.userService.login(new LoginDTO(register.getEmail(), register.getPassword(), "club"));
 		Boolean success = false;
 		if (foundUser == null) {
 			success = this.clubService.registerClub(register);

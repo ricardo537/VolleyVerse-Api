@@ -13,6 +13,8 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
 
 	Optional<Club> findById(UUID id);
 	
+	Optional<Club> findByName(String name);
+	
 	Club save(Club club);
 	
 	void delete(Club club);

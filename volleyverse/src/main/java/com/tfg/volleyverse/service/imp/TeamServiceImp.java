@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tfg.volleyverse.dto.FilterTeamDTO;
 import com.tfg.volleyverse.dto.LeaveTeamDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.TeamCreationDTO;
 import com.tfg.volleyverse.dto.TeamDTO;
+import com.tfg.volleyverse.dto.TeamResumeDTO;
 import com.tfg.volleyverse.model.Invitation;
 import com.tfg.volleyverse.model.Play;
 import com.tfg.volleyverse.model.PlayId;
@@ -139,6 +141,54 @@ public class TeamServiceImp implements TeamService {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<TeamResumeDTO> getFilteredTeams(FilterTeamDTO filter) {
+		User user = this.userRepository.findByEmailAndPassword(filter.getLogin().getEmail(), filter.getLogin().getPassword());
+		if (user.getType().equals("club")) {
+			List<Team> teams = this.teamRepository.findByClubId(user.getIde());
+			List<TeamResumeDTO> filteredTeams = teams.stream()
+					.filter(t -> this.isValidTeam(t, filter))
+					.map(team -> {
+						List<PlayerResumeDTO> members = this.getMembersOfTeam(team.getId());
+						return new TeamResumeDTO(team, members);
+					}).collect(Collectors.toList());
+			return filteredTeams;
+		} else {
+			if (user.getType().equals("player")) {
+				List<Play> plays = this.playRepository.findByPlayerId(user.getIde());
+				List<TeamResumeDTO> filteredTeams = plays.stream()
+						.map(p -> {
+							Optional<Team> team = this.teamRepository.findById(p.getTeamId());
+							if (team.isPresent()) {
+								return team.get();
+							} else {
+								return null;
+							}
+						}).filter(t -> t != null)
+						.filter(te -> this.isValidTeam(te, filter))
+						.map(team -> {
+							List<PlayerResumeDTO> members = this.getMembersOfTeam(team.getId());
+							return new TeamResumeDTO(team, members);
+						}).collect(Collectors.toList());
+				return filteredTeams;
+			}
+		}
+		return List.of();
+	}
+	
+	private boolean isValidTeam(Team team, FilterTeamDTO filter) {
+		if (!filter.getCategory().equals("") && !filter.getCategory().equals(team.getCategory())) {
+			return false;
+		}
+		if (!filter.getGender().equals("") && !filter.getGender().equals(team.getGender())) {
+			return false;
+		}
+		if (!filter.getType().equals("") && !filter.getType().equals(team.getType())) {
+			return false;
+		}
+		return true;
 	}
 
 }

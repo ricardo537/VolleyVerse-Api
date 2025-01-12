@@ -123,6 +123,5 @@ public class PlayerServiceImp implements PlayerService {
 		
 		return new String[] {parts[0], lastName};
 	}
-	
 
 }
