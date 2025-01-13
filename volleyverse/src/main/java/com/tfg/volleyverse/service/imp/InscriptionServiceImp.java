@@ -72,11 +72,14 @@ public class InscriptionServiceImp implements InscriptionService {
 	
 	@Override
 	public boolean unsubscribeEvent(InscriptionDTO inscription) {
+		System.out.println(inscription.getParticipantId().toString() + " " + inscription.getEventId());
 		Optional<Inscription> inscriptionExists = this.inscriptionRepository.findByParticipantIdAndEventId(inscription.getParticipantId(), inscription.getEventId());
 		if (inscriptionExists.isPresent()) {
+			System.out.println("La inscripción existe");
 			Optional<Event> eventOp = this.eventRepository.findById(inscription.getEventId());
 			if (eventOp.isPresent()) {
 				Event event = eventOp.get();
+				System.out.println("El evento existe");
 				if (event.getTypeParticipant().equals("player") && this.participantIsLogin(inscription.getLogin(), inscription.getParticipantId())) {
 					this.inscriptionRepository.delete(new Inscription(inscription));
 					return true;

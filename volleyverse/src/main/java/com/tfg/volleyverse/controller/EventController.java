@@ -125,7 +125,7 @@ public class EventController {
 		if (loginExists != null) {
 			boolean result = this.inscriptionService.unsubscribeEvent(inscription);
 			if (result) {
-				return new ResponseEntity<Boolean>(result, HttpStatus.ACCEPTED);
+				return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Boolean>(result, HttpStatus.NOT_FOUND);
 			}

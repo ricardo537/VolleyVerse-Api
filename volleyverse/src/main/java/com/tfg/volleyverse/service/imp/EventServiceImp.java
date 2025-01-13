@@ -111,7 +111,7 @@ public class EventServiceImp implements EventService {
 			List<MyEventDTO> result = myEvents.stream()
 					.filter((e) -> e.getStartDate().isAfter(now))
 					.map((event) -> {
-						return new MyEventDTO(event);
+						return new MyEventDTO(event, this.getParticipant(user, event));
 					}).collect(Collectors.toList());
 			return result;
 		}
@@ -127,7 +127,7 @@ public class EventServiceImp implements EventService {
 			List<MyEventDTO> result = myEvents.stream()
 					.filter((e) -> e.getStartDate().isBefore(now))
 					.map((event) -> {
-						return new MyEventDTO(event);
+						return new MyEventDTO(event, this.getParticipant(user, event));
 					}).collect(Collectors.toList());
 			return result;
 		}
@@ -347,7 +347,6 @@ public class EventServiceImp implements EventService {
 						if (team.getId().toString().equals(i.getParticipantId().toString())) {
 							return i.getParticipantId();
 						}
-						return null;
 					}
 					return null;
 				}).filter(p -> p != null)
@@ -361,7 +360,6 @@ public class EventServiceImp implements EventService {
 						if (team.getId().toString().equals(i.getParticipantId().toString())) {
 							return i.getParticipantId();
 						}
-						return null;
 					}
 					return null;
 				}).filter(p -> p != null)
