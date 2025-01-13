@@ -55,6 +55,9 @@ public class PlayerController {
 	
 	@GetMapping("/search") 
 	public ResponseEntity<List<PlayerResumeDTO>> searchPlayers (@RequestParam String gender, @RequestParam String name) {
+		if (name == null || gender == null) {
+			return new ResponseEntity<List<PlayerResumeDTO>>(List.of(), HttpStatus.BAD_REQUEST);
+		}
 		List<PlayerResumeDTO> success = this.playerService.searchPlayers(gender, name);
 		if (success.isEmpty()) {
 			return new ResponseEntity<List<PlayerResumeDTO>>(success, HttpStatus.NOT_FOUND);
