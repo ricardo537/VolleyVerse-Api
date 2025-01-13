@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.tfg.volleyverse.dto.EventRegisterDTO;
+import com.tfg.volleyverse.dto.UpdateEventDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -86,6 +87,24 @@ public class Event {
 	}
 	
 	public Event (EventRegisterDTO event, UUID creatorId) {
+		this.name = event.getName();
+		this.description = event.getDescription();
+		this.address = event.getAddress();
+		this.startDate = event.getStartDate();
+		this.endDate = event.getEndDate();
+		this.type = event.getType();
+		this.minParticipants = event.getMinParticipants();
+		this.maxParticipants = event.getMaxParticipants();
+		this.creatorId = creatorId;
+		this.price = event.getPrice();
+		this.category = event.getCategory();
+		this.gender = event.getGender();
+		this.typeParticipant = event.getTypeParticipant();
+		this.results = event.getResults();
+	}
+	
+	public Event (UpdateEventDTO event, UUID creatorId) {
+		this.id = event.getId();
 		this.name = event.getName();
 		this.description = event.getDescription();
 		this.address = event.getAddress();

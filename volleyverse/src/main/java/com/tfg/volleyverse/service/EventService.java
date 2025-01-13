@@ -12,6 +12,7 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.dto.ParticipantsDTO;
 import com.tfg.volleyverse.dto.ResumeDTO;
+import com.tfg.volleyverse.dto.UpdateEventDTO;
 import com.tfg.volleyverse.model.Event;
 
 public interface EventService {
@@ -35,5 +36,7 @@ public interface EventService {
 	List<EventJoinedDTO> getPastEventsJoined (LoginDTO login);
 	
 	List<EventJoinedDTO> getFutureEventsJoined (LoginDTO login);
+	
+	boolean updateEvent (UpdateEventDTO event);
 	
 }

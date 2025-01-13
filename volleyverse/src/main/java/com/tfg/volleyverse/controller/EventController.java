@@ -27,6 +27,7 @@ import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.MyEventDTO;
 import com.tfg.volleyverse.dto.ParticipantsDTO;
 import com.tfg.volleyverse.dto.ResumeDTO;
+import com.tfg.volleyverse.dto.UpdateEventDTO;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.service.imp.EventServiceImp;
 import com.tfg.volleyverse.service.imp.InscriptionServiceImp;
@@ -169,5 +170,19 @@ public class EventController {
 			return new ResponseEntity<List<EventJoinedDTO>>(events, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<EventJoinedDTO>>(List.of(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@PostMapping("/updateEvent")
+	public ResponseEntity<Boolean> updateEvent(@RequestBody UpdateEventDTO event) {
+		LoginDTO login = this.userService.login(event.getLogin());
+		if (login != null) {
+			boolean success = this.eventService.updateEvent(event);
+			if (success) {
+				return new ResponseEntity<Boolean>(false, HttpStatus.OK); 
+			} else {
+				return new ResponseEntity<Boolean>(false, HttpStatus.NOT_FOUND); 
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE); 
 	}
 }

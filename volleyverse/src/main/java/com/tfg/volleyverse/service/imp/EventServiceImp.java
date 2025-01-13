@@ -23,6 +23,7 @@ import com.tfg.volleyverse.dto.ParticipantsDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.ResumeDTO;
 import com.tfg.volleyverse.dto.TeamResumeDTO;
+import com.tfg.volleyverse.dto.UpdateEventDTO;
 import com.tfg.volleyverse.model.Club;
 import com.tfg.volleyverse.model.Event;
 import com.tfg.volleyverse.model.Inscription;
@@ -440,6 +441,17 @@ public class EventServiceImp implements EventService {
 		LocalDateTime now = LocalDateTime.now();
 		List<EventJoinedDTO> result = events.stream().filter(e -> e.getStartDate().isAfter(now)).collect(Collectors.toList());
 		return result;
+	}
+
+	@Override
+	public boolean updateEvent(UpdateEventDTO event) {
+		User user = this.userRepository.findByEmail(event.getLogin().getEmail());
+		Event eventUpdated = new Event(event, user.getIde());
+		Event success = this.eventRepository.save(eventUpdated);
+		if (success != null) {
+			return true;
+		}
+		return false;
 	}
 	
 }
