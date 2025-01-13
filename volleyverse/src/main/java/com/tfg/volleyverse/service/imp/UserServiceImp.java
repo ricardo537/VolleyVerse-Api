@@ -103,10 +103,10 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public Object getUserData(LoginDTO login) {
-		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
+	public Object getUserData(UUID id) {
+		User user = this.userRepository.findByIde(id);
 		if (user != null) {
-			switch (login.getType()) {
+			switch (user.getType()) {
 			case "club": {
 				Optional<Club> club = this.clubRepository.findById(user.getIde());
 				if (club.isEmpty()) {

@@ -11,7 +11,7 @@ public interface UserService {
 	
 	boolean delete (LoginDTO login);
 	
-	Object getUserData (LoginDTO login);
+	Object getUserData (UUID id);
 	
 	boolean updateProfileImg (String email, String fileName);
 	
