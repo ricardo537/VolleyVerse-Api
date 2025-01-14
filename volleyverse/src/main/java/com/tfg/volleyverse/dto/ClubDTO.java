@@ -24,7 +24,7 @@ public class ClubDTO {
 	
 	public ClubDTO(Club club, String img) {
 		this.name = club.getName();
-		this.zip_code = club.getZip_code();
+		this.zip_code = club.getZipCode();
 		this.contact = club.getContact();
 		this.web = club.getWeb();
 		if (img == null) {

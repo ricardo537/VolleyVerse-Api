@@ -24,7 +24,7 @@ public class Club {
 	private String name;
 	
 	@Column (nullable = false)
-	private String zip_code;
+	private String zipCode;
 	
 	@Column (nullable = false)
 	private String contact;
@@ -36,16 +36,16 @@ public class Club {
 		
 	}
 	
-	public Club (String name, String zip_code, String contact, String web) {
+	public Club (String name, String zipCode, String contact, String web) {
 		this.name = name;
-		this.zip_code = zip_code;
+		this.zipCode = zipCode;
 		this.contact = contact;
 		this.web = web;
 	}
 	
 	public Club (RegisterClubDTO register) {
 		this.name = register.getName();
-		this.zip_code = register.getZip_code();
+		this.zipCode = register.getZip_code();
 		this.contact = register.getContact();
 		this.web = "";
 	}
@@ -55,7 +55,7 @@ public class Club {
 			this.name = update.getName();
 		}
 		if (update.getZip_code() != null && !update.getZip_code().equals("")) {
-			this.zip_code = update.getZip_code();
+			this.zipCode = update.getZip_code();
 		}
 		if (update.getContact() != null && !update.getContact().equals("")) {
 			this.contact = update.getContact();
@@ -73,12 +73,12 @@ public class Club {
 		this.name = name;
 	}
 
-	public String getZip_code() {
-		return zip_code;
+	public String getZipCode() {
+		return zipCode;
 	}
 
-	public void setZip_code(String zip_code) {
-		this.zip_code = zip_code;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	public String getContact() {

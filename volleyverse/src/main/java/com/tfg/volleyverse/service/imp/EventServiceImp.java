@@ -258,7 +258,7 @@ public class EventServiceImp implements EventService {
 		Optional<Event> event = this.eventRepository.findById(participantsData.getEventId());
 		if (event.isPresent()) {
 			List<Inscription> inscriptions = this.inscriptionRepository.findByEventId(participantsData.getEventId());
-			if (event.get().getTypeParticipant().equals("player")) {
+			if (!inscriptions.isEmpty() && event.get().getTypeParticipant().equals("player")) {
 				List<ResumeDTO> participants = inscriptions.stream()
 						.map(i -> {
 							Optional<Player> player = this.playerRepository.findById(i.getParticipantId());

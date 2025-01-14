@@ -1,13 +1,18 @@
 package com.tfg.volleyverse.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tfg.volleyverse.dto.ClubDTO;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.RegisterClubDTO;
 import com.tfg.volleyverse.dto.UpdateClubDTO;
@@ -46,5 +51,14 @@ public class ClubController {
 		} else {
 			return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<List<ClubDTO>> searchClubs (@RequestParam String zip_code) {
+		List<ClubDTO> clubs = this.clubService.searchClubs(zip_code);
+		if (!clubs.isEmpty()) {
+			return new ResponseEntity<List<ClubDTO>>(clubs, HttpStatus.OK);
+		}
+		return new ResponseEntity<List<ClubDTO>>(clubs, HttpStatus.NOT_FOUND);
 	}
 }

@@ -1,5 +1,6 @@
 package com.tfg.volleyverse.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,4 +19,6 @@ public interface ClubRepository extends JpaRepository<Club, UUID> {
 	Club save(Club club);
 	
 	void delete(Club club);
+	
+	List<Club> findByZipCode(String zipCode);
 }

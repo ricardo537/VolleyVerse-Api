@@ -1,6 +1,8 @@
 package com.tfg.volleyverse.service.imp;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +82,20 @@ public class ClubServiceImp implements ClubService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<ClubDTO> searchClubs(String zip_code) {
+		List<Club> clubs = this.clubRepository.findByZipCode(zip_code);
+		return clubs.stream()
+				.map(c -> {
+					User user = userRepository.findByIde(c.getId());
+					String img = "";
+					if (user != null) {
+						img = user.getImg();
+					}
+					return new ClubDTO(c, img);
+				}).collect(Collectors.toList());
 	}
 
 }
