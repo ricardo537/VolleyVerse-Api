@@ -157,7 +157,7 @@ public class EventServiceImp implements EventService {
 				.collect(Collectors.toList());
 		if (events.size() > 0) {
 			List<EventDTO> results = eventsDTO.stream()
-					.filter((event) -> (event.isValid(filter)))
+					.filter((event) -> (event.isValid(filter) && event.getMaxParticipants() > event.getNum_participants()))
 					.collect(Collectors.toList());
 			return results;
 		}
