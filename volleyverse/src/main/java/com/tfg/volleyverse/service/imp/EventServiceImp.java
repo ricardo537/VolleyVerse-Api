@@ -111,7 +111,8 @@ public class EventServiceImp implements EventService {
 			List<MyEventDTO> result = myEvents.stream()
 					.filter((e) -> e.getStartDate().isAfter(now))
 					.map((event) -> {
-						return new MyEventDTO(event, this.getParticipant(user, event));
+						List<ResumeDTO> participants = this.getParticipants(new ParticipantsDTO(event.getId(), login));
+						return new MyEventDTO(event, this.getParticipant(user, event), participants.size());
 					}).collect(Collectors.toList());
 			return result;
 		}
@@ -127,7 +128,8 @@ public class EventServiceImp implements EventService {
 			List<MyEventDTO> result = myEvents.stream()
 					.filter((e) -> e.getStartDate().isBefore(now))
 					.map((event) -> {
-						return new MyEventDTO(event, this.getParticipant(user, event));
+						List<ResumeDTO> participants = this.getParticipants(new ParticipantsDTO(event.getId(), login));
+						return new MyEventDTO(event, this.getParticipant(user, event), participants.size());
 					}).collect(Collectors.toList());
 			return result;
 		}
@@ -147,7 +149,8 @@ public class EventServiceImp implements EventService {
 						if (this.isEnrolled(event, filter.getLogin())) {
 							return null;
 						}
-						return new EventDTO(event, this.getNameCreator(event));
+						List<ResumeDTO> participants = this.getParticipants(new ParticipantsDTO(event.getId(), filter.getLogin()));
+						return new EventDTO(event, this.getNameCreator(event), participants.size());
 					}
 					return null;
 				}).filter(e -> e != null)
@@ -306,7 +309,8 @@ public class EventServiceImp implements EventService {
 				eventsAlone.addAll(eventsWithTeams);
 				List<EventJoinedDTO> events = eventsAlone.stream()
 						.map(e -> {
-							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e));
+							List<ResumeDTO> participants = this.getParticipants(new ParticipantsDTO(e.getId(), login));
+							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e), participants.size());
 							return event;
 						}).collect(Collectors.toList());
 				return events;
@@ -315,7 +319,8 @@ public class EventServiceImp implements EventService {
 				List<Event> eventsOfTeams = this.getEventsJoinedWithTeam(user.getIde(), user.getType());
 				List<EventJoinedDTO> events = eventsOfTeams.stream()
 						.map(e -> {
-							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e));
+							List<ResumeDTO> participants = this.getParticipants(new ParticipantsDTO(e.getId(), login));
+							EventJoinedDTO event = new EventJoinedDTO(e, this.getNameCreator(e), this.getParticipant(user, e), participants.size());
 							return event;
 						}).collect(Collectors.toList());
 				return events;

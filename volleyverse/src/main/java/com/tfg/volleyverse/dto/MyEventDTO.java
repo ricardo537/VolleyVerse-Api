@@ -22,6 +22,7 @@ public class MyEventDTO {
 	private String typeParticipant;
 	private Boolean results;
 	private UUID participantId;
+	private int num_participants;
 	
 	public MyEventDTO () {
 		
@@ -29,7 +30,7 @@ public class MyEventDTO {
 
 	public MyEventDTO(UUID id, String name, String description, String address, LocalDateTime startDate,
 			LocalDateTime endDate, String type, Integer minParticipants, Integer maxParticipants, Double price,
-			String category, String gender, String typeParticipant, Boolean results, UUID participantId) {
+			String category, String gender, String typeParticipant, Boolean results, UUID participantId, int num_participant) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -45,9 +46,10 @@ public class MyEventDTO {
 		this.typeParticipant = typeParticipant;
 		this.results = results;
 		this.participantId = participantId;
+		this.num_participants = num_participant;
 	}
 	
-	public MyEventDTO(Event event, UUID participantId) {
+	public MyEventDTO(Event event, UUID participantId, int num_participant) {
 		this.id = event.getId();
 		this.name = event.getName();
 		this.description = event.getDescription();
@@ -63,6 +65,7 @@ public class MyEventDTO {
 		this.typeParticipant = event.getTypeParticipant();
 		this.results = event.getResults();
 		this.participantId = participantId;
+		this.num_participants = num_participants;
 	}
 
 	public UUID getId() {
@@ -183,6 +186,14 @@ public class MyEventDTO {
 
 	public void setParticipantId(UUID participantId) {
 		this.participantId = participantId;
+	}
+
+	public int getNum_participants() {
+		return num_participants;
+	}
+
+	public void setNum_participants(int num_participants) {
+		this.num_participants = num_participants;
 	}
 	
 }

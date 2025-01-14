@@ -22,6 +22,7 @@ public class EventDTO {
 	private String typeParticipant;
 	private Boolean results;
 	private String creator;
+	private int num_participants;
 	
 	public EventDTO () {
 		
@@ -29,7 +30,7 @@ public class EventDTO {
 
 	public EventDTO(UUID id, String name, String description, String address, LocalDateTime startDate,
 			LocalDateTime endDate, String type, Integer minParticipants, Integer maxParticipants, Double price,
-			String category, String gender, String typeParticipant, Boolean results, String creator) {
+			String category, String gender, String typeParticipant, Boolean results, String creator, int num_participants) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -45,9 +46,10 @@ public class EventDTO {
 		this.typeParticipant = typeParticipant;
 		this.results = results;
 		this.creator = creator;
+		this.num_participants = num_participants;
 	}
 	
-	public EventDTO (Event event, String creator) {
+	public EventDTO (Event event, String creator, int num_participants) {
 		this.id = event.getId();
 		this.name = event.getName();
 		this.description = event.getDescription();
@@ -63,6 +65,7 @@ public class EventDTO {
 		this.typeParticipant = event.getTypeParticipant();
 		this.results = event.getResults();
 		this.creator = creator;
+		this.num_participants = num_participants;
 	}
 	
 	public boolean isValid (FilterEventDTO filter) {
@@ -207,6 +210,14 @@ public class EventDTO {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+
+	public int getNum_participants() {
+		return num_participants;
+	}
+
+	public void setNum_participants(int num_participants) {
+		this.num_participants = num_participants;
 	}
 	
 }

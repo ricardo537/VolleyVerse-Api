@@ -22,6 +22,7 @@ public class EventJoinedDTO {
 	private Boolean results;
 	private String creator;
 	private UUID participantId;
+	private int num_participants;
 	
 	public EventJoinedDTO () {
 		
@@ -29,7 +30,7 @@ public class EventJoinedDTO {
 
 	public EventJoinedDTO(UUID id, String name, String description, String address, LocalDateTime startDate,
 			LocalDateTime endDate, String type, Integer minParticipants, Integer maxParticipants, Double price,
-			String category, String gender, String typeParticipant, Boolean results, String creator, UUID participantId) {
+			String category, String gender, String typeParticipant, Boolean results, String creator, UUID participantId, int num_participants) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -46,9 +47,10 @@ public class EventJoinedDTO {
 		this.results = results;
 		this.creator = creator;
 		this.participantId = participantId;
+		this.num_participants = num_participants;
 	}
 	
-	public EventJoinedDTO (Event event, String creator, UUID participantId) {
+	public EventJoinedDTO (Event event, String creator, UUID participantId, int num_participants) {
 		this.id = event.getId();
 		this.name = event.getName();
 		this.description = event.getDescription();
@@ -65,6 +67,7 @@ public class EventJoinedDTO {
 		this.results = event.getResults();
 		this.creator = creator;
 		this.participantId = participantId;
+		this.num_participants = num_participants;
 	}
 	
 	public boolean isValid (FilterEventDTO filter) {
@@ -218,4 +221,13 @@ public class EventJoinedDTO {
 	public void setParticipantId(UUID participantId) {
 		this.participantId = participantId;
 	}
+
+	public int getNum_participants() {
+		return num_participants;
+	}
+
+	public void setNum_participants(int num_participants) {
+		this.num_participants = num_participants;
+	}
+	
 }
