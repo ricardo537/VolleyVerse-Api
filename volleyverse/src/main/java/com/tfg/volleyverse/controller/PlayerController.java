@@ -1,6 +1,7 @@
 package com.tfg.volleyverse.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tfg.volleyverse.dto.LoginDTO;
 import com.tfg.volleyverse.dto.PlayerResumeDTO;
 import com.tfg.volleyverse.dto.RegisterPlayerDTO;
+import com.tfg.volleyverse.dto.StatsDTO;
 import com.tfg.volleyverse.dto.UpdatePlayerDTO;
 import com.tfg.volleyverse.model.Player;
 import com.tfg.volleyverse.service.imp.PlayerServiceImp;
+import com.tfg.volleyverse.service.imp.StatsServiceImp;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
 
 @RestController
@@ -28,6 +31,8 @@ public class PlayerController {
 	private PlayerServiceImp playerService;
 	@Autowired
 	private UserServiceImp userService;
+	@Autowired
+	private StatsServiceImp statsService;
 	
 	@PostMapping("/register")
 	public ResponseEntity<Boolean> registerUser (@RequestBody RegisterPlayerDTO register) {
@@ -64,6 +69,28 @@ public class PlayerController {
 		}
 		return new ResponseEntity<List<PlayerResumeDTO>>(success, HttpStatus.OK);
 		
+	}
+	
+	@PostMapping("/updateStats")
+	public ResponseEntity<Boolean> updateStats (@RequestBody StatsDTO stats) {
+		LoginDTO login = this.userService.login(stats.getLogin());
+		if (login != null) {
+			boolean success = this.statsService.updateStats(stats);
+			if (success) {
+				return new ResponseEntity<Boolean>(success, HttpStatus.OK);
+			}
+			return new ResponseEntity<Boolean>(success, HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@GetMapping("/getStats")
+	public ResponseEntity<StatsDTO> getStats (@RequestParam UUID playerId) {
+		StatsDTO stats = this.statsService.getStats(playerId);
+		if (stats != null) {
+			return new ResponseEntity<StatsDTO>(stats, HttpStatus.OK);
+		}
+		return new ResponseEntity<StatsDTO>(stats, HttpStatus.NOT_FOUND);
 	}
 	
 }
