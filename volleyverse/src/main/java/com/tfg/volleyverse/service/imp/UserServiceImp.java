@@ -112,7 +112,7 @@ public class UserServiceImp implements UserService {
 				if (club.isEmpty()) {
 					return null;
 				}
-				return new ClubDTO (club.get());
+				return new ClubDTO (club.get(), user.getImg());
 			}
 			default : {
 				Optional<Player> player = this.playerRepository.findById(user.getIde());

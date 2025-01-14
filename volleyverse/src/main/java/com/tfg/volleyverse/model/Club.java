@@ -29,20 +29,25 @@ public class Club {
 	@Column (nullable = false)
 	private String contact;
 	
+	@Column (nullable = false)
+	private String web;
+	
 	private Club () {
 		
 	}
 	
-	public Club (String name, String zip_code, String contact) {
+	public Club (String name, String zip_code, String contact, String web) {
 		this.name = name;
 		this.zip_code = zip_code;
 		this.contact = contact;
+		this.web = web;
 	}
 	
 	public Club (RegisterClubDTO register) {
 		this.name = register.getName();
 		this.zip_code = register.getZip_code();
 		this.contact = register.getContact();
+		this.web = "";
 	}
 	
 	public void update (UpdateClubDTO update) {
@@ -54,6 +59,9 @@ public class Club {
 		}
 		if (update.getContact() != null && !update.getContact().equals("")) {
 			this.contact = update.getContact();
+		}
+		if (update.getWeb() != null && !update.getWeb().equals("")) {
+			this.web = update.getWeb();
 		}
 	}
 
@@ -83,6 +91,18 @@ public class Club {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public String getWeb() {
+		return web;
+	}
+
+	public void setWeb(String web) {
+		this.web = web;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	

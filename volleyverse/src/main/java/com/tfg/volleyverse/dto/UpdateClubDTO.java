@@ -9,13 +9,14 @@ public class UpdateClubDTO {
 	private String name;
 	private String zip_code;
 	private String contact;
+	private String web;
 	private LoginDTO login;
 	
 	UpdateClubDTO () {
 		
 	}
 
-	public UpdateClubDTO(String email, String password, String name, String zip_code, String contact, LoginDTO login) {
+	public UpdateClubDTO(String email, String password, String name, String zip_code, String contact, String web, LoginDTO login) {
 		super();
 		this.email = email;
 		this.password = password;
@@ -23,6 +24,7 @@ public class UpdateClubDTO {
 		this.zip_code = zip_code;
 		this.contact = contact;
 		this.login = login;
+		this.web = web;
 	}
 
 	public String getEmail() {
@@ -63,6 +65,14 @@ public class UpdateClubDTO {
 
 	public void setContact(String contact) {
 		this.contact = contact;
+	}
+
+	public String getWeb() {
+		return web;
+	}
+
+	public void setWeb(String web) {
+		this.web = web;
 	}
 
 	public LoginDTO getLogin() {
