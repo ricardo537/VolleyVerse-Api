@@ -1,32 +1,52 @@
-package com.tfg.volleyverse.controllerImp;
+package com.tfg.volleyverse.controller.Imp;
 
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tfg.volleyverse.controller.AuthController;
 import com.tfg.volleyverse.dto.LoginDTO;
+import com.tfg.volleyverse.service.AuthService;
 import com.tfg.volleyverse.service.imp.UserServiceImp;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("volleyverse/api/v1/auth")
 public class AuthControllerImp implements AuthController {
 	
 	@Autowired
 	private UserServiceImp userService;
+	private AuthenticationManager authenticationManager;
+	private UserDetailsService userDetailsService;
+	@Autowired
+	private AuthService authService;
+	
+	public AuthControllerImp(AuthenticationManager authenticationManager, AuthService authService, UserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.authService = authService;
+        this.userDetailsService = userDetailsService;
+    }
 	
 	@Override
-	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login) {
+	public ResponseEntity<String> login (@RequestBody LoginDTO login) {
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
 		LoginDTO success = this.userService.login(login);
 		if (success != null) {
-			return new ResponseEntity<LoginDTO>(success, HttpStatus.OK);
+			UserDetails userDetails = userDetailsService.loadUserByUsername(login.getEmail());
+			return new ResponseEntity<String>(authService.generateToken(userDetails), HttpStatus.OK);
 		} 
-		return new ResponseEntity<LoginDTO>(success, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 	}
 	
 	@Override

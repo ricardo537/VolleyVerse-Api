@@ -1,4 +1,4 @@
-package com.tfg.volleyverse.controllerImp;
+package com.tfg.volleyverse.controller.Imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
