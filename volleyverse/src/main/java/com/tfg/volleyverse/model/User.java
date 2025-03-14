@@ -16,12 +16,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-@Setter
-@Getter
 @Table(name = "user")
 public class User implements UserDetails{
 
@@ -65,6 +61,42 @@ public class User implements UserDetails{
 		return roles.stream()
 				.map(role -> new org.springframework.security.core.authority.SimpleGrantedAuthority(role))
 				.collect(Collectors.toList());
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	public UUID getIde() {
+		return ide;
+	}
+
+	public void setIde(UUID ide) {
+		this.ide = ide;
+	}
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override

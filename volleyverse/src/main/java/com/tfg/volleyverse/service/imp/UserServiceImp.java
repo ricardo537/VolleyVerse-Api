@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tfg.volleyverse.dto.ClubDTO;
@@ -39,12 +42,14 @@ public class UserServiceImp implements UserService {
 	private PlayRepository playRepository;
 	@Autowired
 	private InvitationRepository invitationRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public LoginDTO login(LoginDTO login) {
-		User user = this.userRepository.findByEmailAndPassword(login.getEmail(), login.getPassword());
-		if (user != null) {
-			return new LoginDTO(user);
+	public UserDetails login(LoginDTO login) {
+		Optional<User> user = userRepository.findByEmail(login.getEmail());
+		if (user.isPresent() && passwordEncoder.matches(login.getPassword(), user.get().getPassword())) {
+			return user.get();
 		}
 		return null;
 	}
@@ -128,7 +133,7 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public boolean updateProfileImg(String email, String fileName) {
-		User user = this.userRepository.findByEmail(email);
+		User user = this.userRepository.findByEmail(email).get();
 		if (user != null) {
 			this.userRepository.delete(user);
 			user.setImg(fileName);
@@ -170,6 +175,12 @@ public class UserServiceImp implements UserService {
 			return user.getIde();
 		}
 		return null;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByEmail(username)
+				.orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 	}
 
 }

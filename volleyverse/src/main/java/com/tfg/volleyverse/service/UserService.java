@@ -2,12 +2,14 @@ package com.tfg.volleyverse.service;
 
 import java.util.UUID;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import com.tfg.volleyverse.dto.LoginDTO;
-import com.tfg.volleyverse.dto.RegisterUserDTO;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
-	LoginDTO login (LoginDTO login);
+	UserDetails login (LoginDTO login);
 	
 	boolean delete (LoginDTO login);
 	
