@@ -9,7 +9,7 @@ import com.tfg.volleyverse.dto.LoginDTO;
 public interface AuthController {
 	
 	@PostMapping("/login")
-	public ResponseEntity<LoginDTO> login (@RequestBody LoginDTO login);
+	public ResponseEntity<String> login (@RequestBody LoginDTO login);
 	
 	@PostMapping("/delete")
 	public ResponseEntity<Boolean> delete (@RequestBody LoginDTO login);
